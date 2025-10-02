@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prospection IA – App</title>
+  <meta name="theme-color" content="#2563eb" />
+  <style>
+    :root{
+      --bg:#f7f9fc; --surface:#ffffff; --muted:#6b7280; --text:#0f172a; --primary:#3b82f6;
+      --primary-weak:#dbeafe; --border:#e5e7eb; --ok:#16a34a; --warn:#f59e0b; --card:#f8fafc;
+      --radius:14px; --shadow:0 8px 24px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0; font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; color:var(--text); background:var(--bg)}
+    a{color:inherit; text-decoration:none}
+    .app{display:grid; grid-template-columns:260px 1fr; height:100%}
+    /* Sidebar */
+    .side{background:#fff; border-right:1px solid var(--border); padding:18px 14px; display:flex; flex-direction:column; gap:14px}
+    .brand{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.2px}
+    .brand i{background:var(--primary-weak); color:var(--primary); width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-style:normal}
+    .nav{margin-top:6px; display:flex; flex-direction:column; gap:6px}
+    .nav a{padding:10px 12px; border-radius:10px; display:flex; gap:10px; align-items:center; color:#111827}
+    .nav a.active, .nav a:hover{background:var(--primary-weak); color:var(--primary)}
+    .side .spacer{flex:1}
+    .side .user{display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; background:var(--card); border:1px solid var(--border)}
+    .badge{font-size:12px; color:#334155}
+    /* Topbar & layout */
+    .main{display:flex; flex-direction:column; min-width:0}
+    .top{height:60px; display:flex; align-items:center; justify-content:space-between; padding:0 18px; border-bottom:1px solid var(--border); background:#fff}
+    .top .actions{display:flex; gap:10px}
+    .btn{padding:10px 14px; border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer}
+    .btn.primary{background:var(--primary); color:#fff; border-color:transparent}
+    .btn.ghost{background:transparent}
+    .content{padding:22px; overflow:auto}
+    .h1{font-size:26px; font-weight:800; margin:0 0 4px}
+    .p-muted{color:var(--muted); margin:0 0 20px}
+    /* Cards, grids */
+    .grid{display:grid; gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:1000px){ .grid.cols-3{grid-template-columns:1fr} .app{grid-template-columns:1fr} .side{position:fixed; inset:0 40% 0 0; z-index:30; display:none} }
+    .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
+    .card h3{margin:0 0 10px; font-size:16px}
+    .stat{display:flex; align-items:center; justify-content:space-between}
+    .stat .kpi{font-size:24px; font-weight:800}
+    .chip{font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#3730a3}
+    /* Tables */
+    table{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid var(--border); border-radius:12px}
+    thead th{background:var(--card); color:#334155; text-align:left; font-weight:700; padding:10px; border-bottom:1px solid var(--border)}
+    tbody td{padding:10px; border-top:1px solid var(--border)}
+    /* Forms */
+    label{display:flex; flex-direction:column; gap:6px}
+    input, select, textarea{padding:12px; border:1px solid var(--border); border-radius:12px; background:#fff; outline:none}
+    textarea{resize:vertical}
+    .row{display:flex; gap:12px; flex-wrap:wrap}
+    .right{margin-left:auto}
+    .tip{display:flex; gap:10px; padding:12px; border-radius:12px; background:#f1f5f9; border:1px solid var(--border)}
+    .tip.ok{background:#ecfdf5; border-color:#bbf7d0}
+    .tip.warn{background:#fffbeb; border-color:#fde68a}
+    .range{width:100%}
+    /* Login */
+    .login-wrap{min-height:100vh; display:grid; place-items:center; background:radial-gradient(60% 60% at 50% 10%, #eef2ff, transparent 60%), var(--bg)}
+    .login{width:100%; max-width:420px; background:#fff; border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow:var(--shadow)}
+    .center{display:grid; place-items:center}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN (remplace l’app si non connecté) -->
+<div id="screen-login" class="login-wrap" hidden>
+  <div class="login">
+    <div class="brand" style="margin-bottom:8px;"><i>🧠</i> <span>Prospection IA</span></div>
+    <h2 style="margin:6px 0 12px">Se connecter</h2>
+    <p class="p-muted" style="margin-top:-6px">Entrez vos identifiants pour accéder à votre compte</p>
+    <form id="form-login" class="grid" style="gap:12px;">
+      <label><span>Email</span><input type="email" name="email" placeholder="votre@email.com" required></label>
+      <label><span>Mot de passe</span><input type="password" name="password" placeholder="••••••••" required></label>
+      <button class="btn primary" type="submit">Se connecter</button>
+    </form>
+    <div class="p-muted" style="margin-top:12px; font-size:12px">Pas encore de compte ? <a href="#" style="color:var(--primary)">S’inscrire</a></div>
+    <div class="p-muted" style="margin-top:10px; font-size:12px">En vous connectant, vous acceptez nos <a href="#">conditions d’utilisation</a> & <a href="#">politique de confidentialité</a>.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="screen-app" class="app" hidden>
+  <!-- Sidebar -->
+  <aside class="side" id="sidebar">
+    <div class="brand"><i>🧠</i><span>Prospection IA</span></div>
+    <nav class="nav" id="nav">
+      <a href="#/dashboard" data-route="dashboard" class="active">📊 Dashboard</a>
+      <a href="#/import" data-route="import">📤 Import Contacts</a>
+      <a href="#/generate" data-route="generate">💬 Generate Messages</a>
+      <a href="#/history" data-route="history">🕘 History</a>
+      <a href="#/settings" data-route="settings">⚙️ Settings</a>
+    </nav>
+    <div class="spacer"></div>
+    <div class="user">
+      <div style="width:34px;height:34px;border-radius:10px;background:#eef2ff;display:grid;place-items:center">👤</div>
+      <div>
+        <div style="font-weight:700">Tom</div>
+        <div class="badge">Free plan</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <section class="main">
+    <div class="top">
+      <div style="font-weight:700">Bienvenue</div>
+      <div class="actions">
+        <button class="btn ghost" id="btn-logout">Déconnexion</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="view-dashboard">
+        <h1 class="h1">Bienvenue sur Prospection IA</h1>
+        <p class="p-muted">Gérez vos campagnes et suivez vos performances en temps réel.</p>
+
+        <div class="grid cols-3">
+          <div class="card stat"><div><div style="color:#334155">Total Contacts</div><div class="kpi" id="kpi-contacts">2,847</div></div><span class="chip">+12%</span></div>
+          <div class="card stat"><div><div style="color:#334155">Messages Générés</div><div class="kpi" id="kpi-msgs">1,293</div></div><span class="chip" style="background:#ecfeff;color:#155e75">+8%</span></div>
+          <div class="card stat"><div><div style="color:#334155">Taux de Succès</div><div class="kpi" id="kpi-rate">24.5%</div></div><span class="chip" style="background:#ecfccb;color:#365314">+3.2%</span></div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:16px">
+          <div class="card">
+            <h3>Activité Récente</h3>
+            <table>
+              <thead><tr><th>Événement</th><th>Quand</th></tr></thead>
+              <tbody id="recent-activity">
+                <tr><td>Nouveau contact importé <a href="#">Marie Dubois</a></td><td>il y a 2 min</td></tr>
+                <tr><td>Message généré pour <a href="#">Jean Martin</a></td><td>il y a 15 min</td></tr>
+                <tr><td>Réponse reçue de <a href="#">Sophie Bernard</a></td><td>il y a 1 h</td></tr>
+                <tr><td>Campagne lancée: <a href="#">Tech Startups Q1</a></td><td>il y a 2 h</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>Actions Rapides</h3>
+            <div class="grid">
+              <div class="row">
+                <a class="btn" href="#/import">📤 Import Contacts</a>
+                <a class="btn" href="#/generate">💬 Generate Messages</a>
+                <a class="btn" href="#/history">📈 View Analytics</a>
+              </div>
+              <div class="tip ok"><span>✅</span><div>Astuce : utilisez des messages de 100–150 mots pour de meilleurs taux de réponse.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMPORT -->
+      <div id="view-import" hidden>
+        <h1 class="h1">Import des Contacts</h1>
+        <p class="p-muted">Importez vos contacts depuis un fichier CSV pour démarrer vos campagnes.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Télécharger votre fichier CSV</h3>
+            <div id="drop" class="center" style="height:220px;border:2px dashed var(--border);border-radius:16px;background:#fafafa">
+              <div class="center" style="gap:10px">
+                <div style="font-size:30px">⬆️</div>
+                <div style="text-align:center">
+                  <div style="font-weight:700;margin-bottom:6px">Déposez votre fichier CSV ici</div>
+                  <div class="p-muted" style="font-size:13px;margin-bottom:8px">ou cliquez pour parcourir vos fichiers</div>
+                  <input id="file" type="file" accept=".csv" hidden/>
+                  <button class="btn" id="pick">Parcourir les fichiers</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:12px; background:#fff">
+              <h3>Format requis :</h3>
+              <ul style="margin:0 0 0 18px; color:#334155">
+                <li>CSV séparé par virgule</li>
+                <li>Colonnes : <b>Name</b>, <b>Email</b>, <b>LinkedIn</b>, <b>Status</b> (optionnel)</li>
+                <li>Première ligne = en-têtes</li>
+                <li>Taille max : 10 MB</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Aperçu du format</h3>
+            <table id="csv-preview">
+              <thead><tr><th>Name</th><th>Email</th><th>LinkedIn</th></tr></thead>
+              <tbody>
+                <tr><td>Marie Dupont</td><td>marie.dupont@exemple.fr</td><td>linkedin.com/in/marie-…</td></tr>
+                <tr><td>Jean Martin</td><td>jean.martin@company.com</td><td>linkedin.com/in/jean-…</td></tr>
+                <tr><td>Sophie Bernard</td><td>s.bernard@startup.io</td><td>linkedin.com/in/sophi-…</td></tr>
+                <tr><td>Pierre Dubois</td><td>pierre@tech-solutions.com</td><td>linkedin.com/in/pierre-…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENERATE -->
+      <div id="view-generate" hidden>
+        <h1 class="h1">Génération de Messages</h1>
+        <p class="p-muted">Créez des messages personnalisés avec l’IA pour vos campagnes de prospection.</p>
+
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Configuration du Message</h3>
+            <div class="row">
+              <label style="min-width:280px; flex:1">
+                <span>Template de Message</span>
+                <select id="tpl">
+                  <option value="random">Choisir un template</option>
+                  <option value="1">Créa de contenu</option>
+                  <option value="2">Montage vidéo (résultats)</option>
+                </select>
+              </label>
+              <label style="min-width:280px; flex:1">
+                <span>Liste de Contacts</span>
+                <select id="list">
+                  <option value="demo">Exemple (4 contacts)</option>
+                </select>
+              </label>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <button id="btn-generate" class="btn primary" style="flex:1">✨ Générer le Message</button>
+              <button id="btn-copy" class="btn">📋 Copier</button>
+            </div>
+            <label style="margin-top:10px">
+              <span>Message</span>
+              <textarea id="out" rows="8" readonly></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3>Options de Personnalisation</h3>
+            <div class="grid">
+              <div>
+                <div style="font-weight:700;margin-bottom:6px">Ton du Message</div>
+                <div class="grid" style="grid-template-columns:repeat(2,1fr); gap:8px">
+                  <label><input type="radio" name="tone" value="pro" checked> Professionnel</label>
+                  <label><input type="radio" name="tone" value="friendly"> Amical</label>
+                  <label><input type="radio" name="tone" value="casual"> Décontracté</label>
+                  <label><input type="radio" name="tone" value="formal"> Formel</label>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-weight:700;margin:10px 0 6px">Longueur du Message (<span id="len-label">150</span> mots)</div>
+                <input id="len" type="range" class="range" min="60" max="220" step="10" value="150">
+              </div>
+
+              <div class="tip warn">
+                💡 <div>Les messages de 100–150 mots ont un taux de réponse plus élevé.</div>
+              </div>
+              <div class="tip ok">
+                🎯 <div>Astuce : ajoute un détail spécifique sur l’entreprise du prospect pour +réponses.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3>Aperçu Contacts (démo)</h3>
+          <table id="contacts">
+            <thead><tr><th>Nom</th><th>Entreprise</th><th>Email</th><th>Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div id="view-history" hidden>
+        <h1 class="h1">Historique</h1>
+        <p class="p-muted">Dernières générations & envois.</p>
+        <div class="card">
+          <table>
+            <thead><tr><th>Date</th><th>Prospect</th><th>Entreprise</th><th>Template</th><th>Longueur</th></tr></thead>
+            <tbody id="history-body">
+              <tr><td>2025-09-26 12:15</td><td>Jean Martin</td><td>StartupX</td><td>#2</td><td>150</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="view-settings" hidden>
+        <h1 class="h1">Paramètres</h1>
+        <p class="p-muted">Clés API, préférences, sécurité.</p>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Clé API OpenAI</h3>
+            <label><span>OPENAI_API_KEY</span><input type="password" placeholder="sk-..." value=""></label>
+            <div class="row" style="margin-top:10px"><button class="btn primary">Enregistrer</button></div>
+          </div>
+          <div class="card">
+            <h3>Préférences</h3>
+            <label><span>Langue</span>
+              <select><option>Français</option><option>English</option></select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<script>
+  // --- Auth demo (toggle login/app) ---
+  const screenLogin = document.getElementById('screen-login');
+  const screenApp   = document.getElementById('screen-app');
+  const isAuthed = () => localStorage.getItem('auth') === '1';
+  const renderAuth = () => { screenLogin.hidden = isAuthed(); screenApp.hidden = !isAuthed(); };
+  renderAuth();
+
+  document.getElementById('form-login')?.addEventListener('submit', (e)=>{
+    e.preventDefault(); localStorage.setItem('auth','1'); location.hash = '#/dashboard'; renderAuth();
+  });
+  document.getElementById('btn-logout')?.addEventListener('click', ()=>{ localStorage.removeItem('auth'); renderAuth(); });
+
+  // --- Router (hash) ---
+  const views = ['dashboard','import','generate','history','settings'];
+  const setActive = (route) => {
+    document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.route===route));
+    views.forEach(v => document.getElementById('view-'+v).hidden = (v!==route));
+  };
+  const bootRoute = () => {
+    const route = (location.hash.replace('#/','')||'dashboard');
+    if(!views.includes(route)) return location.hash = '#/dashboard';
+    setActive(route);
+  };
+  window.addEventListener('hashchange', bootRoute);
+  bootRoute();
+
+  // --- CSV demo (local parse light) ---
+  const demoContacts = [
+    {name:'Marie Dupont', company:'Acme Labs', email:'marie.dupont@exemple.fr'},
+    {name:'Jean Martin', company:'StartupX', email:'jean.martin@company.com'},
+    {name:'Sophie Bernard', company:'Nova Tech', email:'s.bernard@startup.io'},
+    {name:'Pierre Dubois', company:'Tech Solutions', email:'pierre@tech-solutions.com'}
+  ];
+  const contactsTbody = document.querySelector('#contacts tbody');
+  function paintContacts(list){
+    contactsTbody.innerHTML = list.map(c=>`
+      <tr>
+        <td>${c.name}</td><td>${c.company}</td><td>${c.email||''}</td>
+        <td><button class="btn btn-mini" data-generate='${encodeURIComponent(JSON.stringify(c))}'>Générer</button></td>
+      </tr>`).join('');
+  }
+  paintContacts(demoContacts);
+  contactsTbody?.addEventListener('click', (e)=>{
+    const b = e.target.closest('button[data-generate]');
+    if(!b) return;
+    const c = JSON.parse(decodeURIComponent(b.dataset.generate));
+    // force aléatoire pour la ligne
+    document.getElementById('tpl').value='random';
+    document.getElementById('out').value = generateMessage({name:c.name.split(' ')[0], company:c.company, template:'random', tone:getTone(), length:getLen()});
+  });
+
+  // --- Import: picker/drag ---
+  const drop = document.getElementById('drop');
+  const file = document.getElementById('file');
+  const pick = document.getElementById('pick');
+  pick?.addEventListener('click', ()=>file.click());
+  ['dragenter','dragover'].forEach(ev=>drop?.addEventListener(ev, e=>{e.preventDefault(); drop.style.background='#f0f9ff';}));
+  ;['dragleave','drop'].forEach(ev=>drop?.addEventListener(ev, e=>{e.preventDefault(); drop.style.background='#fafafa';}));
+  drop?.addEventListener('drop', (e)=>{ const f=e.dataTransfer.files?.[0]; if(f) readCsv(f); });
+  file?.addEventListener('change', ()=>{ if(file.files[0]) readCsv(file.files[0]); });
+
+  function readCsv(f){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const rows = String(reader.result).trim().split(/\r?\n/).map(l=>l.split(','));
+      const head = rows.shift()||[];
+      const nameIdx = head.findIndex(h=>/name/i.test(h));
+      const emailIdx= head.findIndex(h=>/mail/i.test(h));
+      const compIdx = head.findIndex(h=>/company|soci/i.test(h));
+      const parsed = rows.slice(0,50).map(r=>({
+        name:r[nameIdx]||'—', email:r[emailIdx]||'', company:r[compIdx]||'—'
+      }));
+      paintContacts(parsed.length?parsed:demoContacts);
+      alert('CSV chargé (aperçu limité à 50 lignes).');
+    };
+    reader.readAsText(f);
+  }
+
+  // --- Message generation (ta fonction + options UI) ---
+  function generateMessage({ name, company, template='random', tone='pro', length=150 }){
+    const n = (name||'').trim(); const c = (company||'').trim();
+    if(!n || !c) throw new Error('Missing name or company');
+
+    const t1 = `Salut ${n}, j’espère que tu vas bien !
+
+Je te contacte car j’ai vu ton travail chez ${c}, et je pense qu’on peut aller plus loin sur la partie création de contenu.
+On accompagne déjà plusieurs entrepreneurs dans leur stratégie pour booster leur acquisition client.
+
+Tu serais dispo pour un call rapide cette semaine ?`;
+
+    const t2 = `Salut ${n},
+
+Je suis tombé sur ton contenu et je trouve qu’il a un vrai potentiel.
+Je travaille avec des profils comme le tien sur le montage & la stratégie vidéo, avec des résultats concrets — pas juste des vues.
+
+On a collaboré avec différents créateurs, et ça pourrait coller avec ton activité chez ${c}.
+On en parle ?`;
+
+    const pool = [t1,t2];
+    let msg = (template==='random') ? pool[Math.floor(Math.random()*pool.length)] : pool[(Number(template)-1)||0];
+
+    // Adaptations simples au ton / longueur (non destructives)
+    if(tone==='friendly'){ msg = msg.replace('Salut','Hey'); }
+    if(tone==='formal'){ msg = msg.replace('Salut','Bonjour').replace('tu','vous'); }
+
+    // Ajustement longueur : ajoute/supprime une phrase d’accroche
+    if(length < 110){
+      msg = msg.replace(/\n\n.+?\.\n?$/s,''); // coupe la dernière phrase
+    } else if(length > 170){
+      msg += `
+
+Petit plus : on prépare tout pour te faire gagner du temps dès la première semaine (framework + snippets prêts).`;
+    }
+    return msg;
+  }
+
+  const getTone = ()=> document.querySelector('input[name="tone"]:checked')?.value || 'pro';
+  const getLen  = ()=> Number(document.getElementById('len')?.value || 150);
+
+  // UI Generate panel
+  const tplSel = document.getElementById('tpl');
+  const out    = document.getElementById('out');
+  const btnGen = document.getElementById('btn-generate');
+  const btnCopy= document.getElementById('btn-copy');
+  const lenInp = document.getElementById('len');
+  const lenLbl = document.getElementById('len-label');
+
+  lenInp?.addEventListener('input', ()=> lenLbl.textContent = getLen());
+  btnGen?.addEventListener('click', ()=>{
+    const first = (demoContacts[0].name.split(' ')[0]);
+    out.value = generateMessage({ name:first, company:demoContacts[0].company, template: tplSel.value, tone:getTone(), length:getLen() });
+  });
+  btnCopy?.addEventListener('click', async ()=>{
+    if(!out.value) return;
+    try{ await navigator.clipboard.writeText(out.value); btnCopy.textContent='✔ Copié'; setTimeout(()=>btnCopy.textContent='📋 Copier',1200); }catch{}
+  });
+
+</script>
+</body>
+</html>
