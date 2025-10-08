@@ -7,6 +7,7 @@
 <body>
   <h1>Créer un compte</h1>
   <form id="registerForm">
+    <label>Nom: <input type="text" name="name" required></label><br><br>
     <label>Email: <input type="email" name="email" required></label><br><br>
     <label>Password: <input type="password" name="password" required minlength="6"></label><br><br>
     <button type="submit">Créer</button>
@@ -22,6 +23,7 @@
       out.textContent = 'Envoi...';
       const fd = new FormData(form);
       const body = {
+        name: fd.get('name'),
         email: fd.get('email'),
         password: fd.get('password')
       };

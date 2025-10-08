@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Se connecter - Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-sm w-full bg-white rounded-lg p-8">
+        <!-- Logo et titre -->
+        <div class="text-center mb-6">
+            <div class="flex justify-center mb-4">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="h-8 w-8">
+            </div>
+            <h1 class="text-xl font-semibold text-gray-900">Prospection IA</h1>
+        </div>
+
+        <div class="text-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Se connecter</h2>
+            <p class="mt-2 text-sm text-gray-600">Entrez vos identifiants pour accéder à votre compte</p>
+        </div>
+
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="votre@email.com">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                    Se connecter
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                Pas encore de compte ? <a href="/register.html" class="text-blue-600 hover:text-blue-700">s'inscrire</a>
+            </p>
+        </div>
+
+        <div class="mt-6 text-center text-xs text-gray-500">
+            En vous connectant, vous acceptez nos <a href="#" class="text-blue-600">conditions d'utilisation</a>
+        </div>
+
+        <div id="loginMessage" class="mt-4 text-center text-sm hidden"></div>
+    </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('loginMessage');
+
+    if (!form) {
+      console.warn('no login form found');
+      return;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.className = 'msg'; msg.textContent = 'Connexion en cours...';
+
+      const fd = new FormData(form);
+      const body = { email: (fd.get('email')||'').toString().trim(), password: (fd.get('password')||'').toString() };
+
+      if (!body.email || !body.password) {
+        msg.classList.add('error'); msg.textContent = 'Merci de renseigner email et mot de passe.'; return;
+      }
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+          credentials: 'same-origin' // <-- indispensable pour que le navigateur accepte Set-Cookie du serveur
+        });
+
+        const text = await res.text();
+        let data = null;
+        try { data = JSON.parse(text); } catch(e){}
+
+        if (!res.ok) {
+          msg.classList.add('error');
+          msg.textContent = (data && data.error) ? data.error : ('Erreur ' + res.status);
+          console.warn('login failed', res.status, text);
+          return;
+        }
+
+        msg.classList.add('success');
+        msg.textContent = 'Connecté — redirection…';
+
+        // redirection si fournie par l'API
+        if (data && data.redirect) window.location.href = data.redirect;
+        else window.location.href = '/app';
+      } catch (err) {
+        console.error('fetch /api/login error', err);
+        msg.classList.add('error');
+        msg.textContent = 'Erreur réseau, voir console';
+      }
+    });
+  });
+  </script>
+</body>
+</html>

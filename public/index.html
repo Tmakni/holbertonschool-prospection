@@ -43,24 +43,10 @@
     <!-- CSS (minifié + hash) -->
     <link rel="stylesheet" href="/assets/app.min.css?v=1732636800" />
 
-    <!-- Security (en-têtes côté serveur recommandés; meta CSP en fallback) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.prospection-ia.example.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; frame-ancestors 'none';" />
+    <!-- Security (header CSP recommended; meta as fallback) -->
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https://api.prospection-ia.example.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; frame-ancestors 'none';" />
 
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">{
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Prospection IA",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
-      "url": "https://prospection-ia.example.com/",
-      "description": "Génération de messages de prospection B2B personnalisés.",
-      "publisher": {"@type": "Organization", "name": "Prospection IA"}
-    }</script>
-
-    <!-- Noindex (à retirer en prod publique) -->
-    <!-- <meta name="robots" content="noindex,nofollow" /> -->
   </head>
 
   <body class="min-h-screen bg-white text-slate-900">
@@ -73,10 +59,11 @@
         </a>
         <nav aria-label="Navigation principale" style="margin-left:auto;display:flex;gap:16px;">
           <a href="#features">Fonctionnalités</a>
-          <a href="#demo">Démo</a><!-- ajouté -->
+          <a href="#demo">Démo</a>
           <a href="#pricing">Tarifs</a>
           <a href="#contact">Contact</a>
-          <a href="/app" class="btn" style="padding:8px 14px;border-radius:9999px;border:1px solid #e5e7eb;">Se connecter</a>
+          <!-- CTA : redirige vers la page de connexion plutôt que vers /app -->
+          <a href="/login.html" class="btn" style="padding:8px 14px;border-radius:9999px;border:1px solid #e5e7eb;">Se connecter</a>
         </nav>
       </div>
     </header>
@@ -86,20 +73,32 @@
       <section style="padding:80px 0;">
         <div class="container" style="max-width:1200px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:24px;align-items:center;">
           <div>
-            <h1 style="font-size:clamp(28px,4vw,48px);line-height:1.1;margin:0 0 12px;">Générez des messages de prospection <span style="white-space:nowrap;">B2B</span> qui obtiennent des réponses</h1>
-            <p style="font-size:18px;color:#334155;margin:0 0 20px;">Importez un CSV, choisissez un modèle, laissez l’IA personnaliser chaque message en quelques secondes.</p>
-            <form id="cta-form" action="/app" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <h1 style="font-size:clamp(28px,4vw,48px);line-height:1.1;margin:0 0 12px;">
+              Générez des messages de prospection <span style="white-space:nowrap;">B2B</span> qui obtiennent des réponses
+            </h1>
+            <p style="font-size:18px;color:#334155;margin:0 0 20px;">
+              Importez un CSV, choisissez un modèle, laissez l’IA personnaliser chaque message en quelques secondes.
+            </p>
+
+            <!-- CTA simplified: redirect to login page -->
+            <form id="cta-form" action="/login.html" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
               <label for="email" class="sr-only">Email</label>
-              <input id="email" name="email" type="email" placeholder="Votre email" autocomplete="email" required style="flex:1;min-width:220px;padding:12px;border:1px solid #e5e7eb;border-radius:12px;" />
-              <button type="submit" class="btn-primary" style="padding:12px 16px;border-radius:12px;background:#0ea5e9;color:#fff;border:0;">Essayer gratuitement</button>
+              <input id="email" name="email" type="email" placeholder="Votre email" autocomplete="email" required
+                     style="flex:1;min-width:220px;padding:12px;border:1px solid #e5e7eb;border-radius:12px;" />
+              <button type="submit" class="btn-primary" style="padding:12px 16px;border-radius:12px;background:#0ea5e9;color:#fff;border:0;">
+                Essayer gratuitement
+              </button>
             </form>
+
             <p style="margin-top:8px;font-size:12px;color:#64748b;">Pas de carte bancaire. Version de démonstration incluse.</p>
           </div>
+
           <div>
             <picture>
-              <!-- Responsive hero image -->
               <source srcset="/assets/hero@2x.webp 2x, /assets/hero.webp 1x" type="image/webp" />
-              <img src="/assets/hero.jpg" alt="Interface Prospection IA avec import CSV et modèles" width="640" height="420" loading="eager" decoding="async" style="width:100%;height:auto;border-radius:16px;border:1px solid #e5e7eb;" />
+              <img src="/assets/hero.jpg" alt="Interface Prospection IA avec import CSV et modèles" width="640" height="420"
+                   loading="eager" decoding="async"
+                   style="width:100%;height:auto;border-radius:16px;border:1px solid #e5e7eb;" />
             </picture>
           </div>
         </div>
@@ -127,7 +126,9 @@
       <section id="demo" style="padding:56px 0;">
         <div class="container" style="max-width:1200px;margin:0 auto;padding:0 16px;">
           <h2 style="font-size:28px;margin:0 0 16px;">Démo — Modèles B2B prêts à l’emploi</h2>
-          <p style="color:#334155;margin:0 0 16px;">Testez 3 messages inspirés de cas réels. Remplissez le prénom et l’entreprise, choisissez un modèle (ou <em>Aléatoire</em>), puis générez.</p>
+          <p style="color:#334155;margin:0 0 16px;">
+            Testez 3 messages inspirés de cas réels. Remplissez le prénom et l’entreprise, choisissez un modèle (ou <em>Aléatoire</em>), puis générez.
+          </p>
 
           <form id="demo-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:880px;">
             <label style="display:flex;flex-direction:column;gap:6px;">
@@ -177,14 +178,8 @@
         <div class="container" style="max-width:1200px;margin:0 auto;padding:0 16px;">
           <h2 style="font-size:28px;margin:0 0 16px;">Contact</h2>
           <form action="https://api.prospection-ia.example.com/contact" method="post" data-enhance="true" style="display:grid;gap:12px;max-width:560px;">
-            <label>
-              <span>Votre email</span>
-              <input type="email" name="email" required autocomplete="email" />
-            </label>
-            <label>
-              <span>Message</span>
-              <textarea name="message" rows="5" required></textarea>
-            </label>
+            <label><span>Votre email</span><input type="email" name="email" required autocomplete="email" /></label>
+            <label><span>Message</span><textarea name="message" rows="5" required></textarea></label>
             <button type="submit" class="btn-primary" style="padding:12px 16px;border-radius:12px;background:#0ea5e9;color:#fff;border:0;">Envoyer</button>
           </form>
         </div>
@@ -205,8 +200,20 @@
       <div role="alert" style="background:#fef3c7;color:#92400e;padding:12px;text-align:center;">JavaScript est désactivé. L’application fonctionnera en mode dégradé.</div>
     </noscript>
 
-    <!-- App JS (minifié + hash) -->
-    <script type="module" defer src="/assets/app.min.js?v=1732636800"></script>
+    <!-- Conditional loader for the app bundle: only load app.min.js if we're on /app -->
+    <script>
+      (function(){
+        try {
+          if (location.pathname === '/app') {
+            const s = document.createElement('script');
+            s.type = 'module';
+            s.defer = true;
+            s.src = '/assets/app.min.js?v=1732636800';
+            document.body.appendChild(s);
+          }
+        } catch (e) { console.warn('app loader error', e); }
+      })();
+    </script>
 
     <!-- Service Worker (PWA optionnel) -->
     <script>
@@ -218,10 +225,10 @@
       document.getElementById('y').textContent = new Date().getFullYear();
     </script>
 
-    <!-- Génération de messages (fonction pure + 3 templates + UI démo) -->
-    <script type="module">
-      // --- Fonction "pure" testable ---
-      export function generateMessage({ name, company, template = "random" }) {
+    <!-- Lightweight in-page generation logic (demo). Not exported, safe for index -->
+    <script>
+      // generateMessage (demo) - keep lightweight and non-exported to avoid collisions
+      function generateMessageForDemo({ name, company, template = "random" }) {
         const n = (name || '').trim();
         const c = (company || '').trim();
         if (!n || !c) throw new Error('Missing name or company');
@@ -240,10 +247,9 @@ Je suis tombé sur ton contenu et je trouve qu’il a un vrai potentiel.
 Je travaille avec des profils comme le tien sur le montage & la stratégie vidéo, avec des résultats concrets — pas juste des vues.
 
 On a collaboré avec différents créateurs, et ça pourrait coller avec ton activité chez ${c}.
-On en parle ?`,
+On en parle ?`
         ];
 
-        // Sélection du template
         let idx;
         if (template === "random") {
           idx = Math.floor(Math.random() * templates.length);
@@ -254,61 +260,57 @@ On en parle ?`,
         return templates[idx];
       }
 
-      // --- Wiring UI démo ---
-      const $name = document.getElementById('demo-name');
-      const $company = document.getElementById('demo-company');
-      const $template = document.getElementById('demo-template');
-      const $output = document.getElementById('demo-output');
-      const $btnGen = document.getElementById('btn-generate');
-      const $btnRegen = document.getElementById('btn-regenerate');
-      const $btnCopy = document.getElementById('btn-copy');
-      const $feedback = document.getElementById('copy-feedback');
+      // UI wiring for demo
+      (function(){
+        const $name = document.getElementById('demo-name');
+        const $company = document.getElementById('demo-company');
+        const $template = document.getElementById('demo-template');
+        const $output = document.getElementById('demo-output');
+        const $btnGen = document.getElementById('btn-generate');
+        const $btnRegen = document.getElementById('btn-regenerate');
+        const $btnCopy = document.getElementById('btn-copy');
+        const $feedback = document.getElementById('copy-feedback');
 
-      function doGenerate() {
-        try {
-          const msg = generateMessage({
-            name: $name.value,
-            company: $company.value,
-            template: $template.value
-          });
-          $output.value = msg;
-          $feedback.style.display = 'none';
-        } catch (e) {
-          $output.value = '⚠️ ' + (e?.message || 'Erreur inattendue');
-        }
-      }
-
-      $btnGen?.addEventListener('click', doGenerate);
-      $btnRegen?.addEventListener('click', () => {
-        // Force aléatoire à chaque régénération
-        const prev = $template.value;
-        $template.value = 'random';
-        doGenerate();
-        $template.value = prev; // on remet le choix visuel
-      });
-
-      $btnCopy?.addEventListener('click', async () => {
-        if (!$output.value) return;
-        try {
-          await navigator.clipboard.writeText($output.value);
-          $feedback.style.display = 'block';
-          setTimeout(() => ($feedback.style.display = 'none'), 1800);
-        } catch {}
-      });
-
-      // UX : générer si l’utilisateur presse Enter dans un champ
-      ['demo-name','demo-company'].forEach(id => {
-        document.getElementById(id)?.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            doGenerate();
+        function doGenerate() {
+          try {
+            const msg = generateMessageForDemo({
+              name: $name.value,
+              company: $company.value,
+              template: $template.value
+            });
+            $output.value = msg;
+            $feedback.style.display = 'none';
+          } catch (e) {
+            $output.value = '⚠️ ' + (e?.message || 'Erreur inattendue');
           }
-        });
-      });
-    </script>
+        }
 
-    <!-- Lightweight analytics placeholder -->
-    <!-- <script defer data-domain="prospection-ia.example.com" src="https://plausible.io/js/script.js"></script> -->
+        $btnGen?.addEventListener('click', doGenerate);
+        $btnRegen?.addEventListener('click', () => {
+          const prev = $template.value;
+          $template.value = 'random';
+          doGenerate();
+          $template.value = prev;
+        });
+
+        $btnCopy?.addEventListener('click', async () => {
+          if (!$output.value) return;
+          try {
+            await navigator.clipboard.writeText($output.value);
+            $feedback.style.display = 'block';
+            setTimeout(() => ($feedback.style.display = 'none'), 1800);
+          } catch {}
+        });
+
+        ['demo-name','demo-company'].forEach(id => {
+          document.getElementById(id)?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              doGenerate();
+            }
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
-

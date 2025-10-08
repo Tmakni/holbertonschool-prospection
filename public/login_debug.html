@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Login debug — Prospection IA</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;padding:20px}
+    .ok{color:green} .err{color:#c02626}
+    pre{background:#f8fafc;border:1px solid #e6eef8;padding:10px}
+    label{display:block;margin:8px 0}
+    input{padding:8px;border:1px solid #ddd;border-radius:8px;width:320px}
+    button{padding:8px 12px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <h2>Debug login</h2>
+  <p>Test rapide : envoie la requête au backend et affiche headers + body. (Ne stocke rien en localStorage)</p>
+
+  <form id="f">
+    <label>Email<br><input name="email" value="test@ex.com" /></label>
+    <label>Mot de passe<br><input name="password" type="password" value="azerty123" /></label>
+    <button type="submit">Se connecter (debug)</button>
+  </form>
+
+  <h3>Résultat</h3>
+  <div id="status"></div>
+  <h4>Response headers</h4>
+  <pre id="headers">—</pre>
+  <h4>Body</h4>
+  <pre id="body">—</pre>
+  <h4>Cookies visibles par document.cookie</h4>
+  <pre id="doccookie">—</pre>
+
+  <script>
+    const form = document.getElementById('f');
+    const headersEl = document.getElementById('headers');
+    const bodyEl = document.getElementById('body');
+    const statusEl = document.getElementById('status');
+    const doccookieEl = document.getElementById('doccookie');
+
+    async function refreshDocCookie(){ doccookieEl.textContent = document.cookie || '(aucun cookie non-httpOnly visible)'; }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      headersEl.textContent = '...';
+      bodyEl.textContent = '...';
+      statusEl.textContent = 'Envoi en cours...';
+
+      const fd = new FormData(form);
+      const payload = { email: (fd.get('email')||'').toString(), password: (fd.get('password')||'').toString() };
+
+      try {
+        // IMPORTANT : credentials: 'same-origin' -> permet au navigateur d'accepter Set-Cookie du même domaine
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          credentials: 'same-origin'
+        });
+
+        statusEl.innerHTML = 'Status: <strong>' + res.status + '</strong>';
+        // Affiche tous les headers disponibles côté fetch
+        let htxt = '';
+        for (const pair of res.headers.entries()) {
+          htxt += pair[0] + ': ' + pair[1] + '\n';
+        }
+        headersEl.textContent = htxt || '(aucun header lisible)';
+
+        const text = await res.text();
+        bodyEl.textContent = text;
+
+        // NOTE: document.cookie NE montre PAS les cookies httpOnly
+        await refreshDocCookie();
+
+        // Indication utile: regarde le panneau Network -> POST /api/login -> Response headers -> Set-Cookie
+        statusEl.innerHTML += ' — Regarde Network → POST /api/login → Response Headers → Set-Cookie';
+
+        // Si le status est 200 et la réponse JSON contient redirect, on redirige pour test
+        try {
+          const json = JSON.parse(text);
+          if (res.ok && json.redirect) {
+            statusEl.innerHTML += '<br><span class="ok">Connecté - redirection vers ' + json.redirect + '</span>';
+            // Delay court pour que l'UI montre les headers/cookies avant navigation
+            setTimeout(()=> { location.href = json.redirect; }, 500);
+          }
+        } catch(e){}
+      } catch (err) {
+        statusEl.innerHTML = '<span class="err">Erreur fetch (voir console)</span>';
+        bodyEl.textContent = String(err);
+        console.error(err);
+      }
+    });
+
+    // Affiche cookies visibles
+    refreshDocCookie();
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue - Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">
+                Bienvenue sur Prospection IA
+            </h1>
+            
+            <p class="text-xl text-gray-600 mb-12">
+                Automatisez votre prospection avec l'intelligence artificielle
+            </p>
+
+            <div class="space-x-4">
+                <a href="/login.html" 
+                   class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Se connecter
+                </a>
+                <a href="/register.html" 
+                   class="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors">
+                    S'inscrire
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    Messages Personnalisés
+                </h2>
+                <p class="text-gray-600">
+                    Générez des messages de prospection uniques et personnalisés pour chaque contact.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    Gestion des Contacts
+                </h2>
+                <p class="text-gray-600">
+                    Organisez et gérez facilement votre liste de prospects.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    Suivi des Résultats
+                </h2>
+                <p class="text-gray-600">
+                    Analysez l'efficacité de vos campagnes de prospection.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Vérification de l'authentification
+    (async function() {
+        try {
+            const res = await fetch('/api/me', { credentials: 'same-origin' });
+            if (res.ok) {
+                // Si déjà connecté, rediriger vers l'application
+                window.location.href = '/app';
+            }
+        } catch (err) {
+            console.warn('Vérification auth échouée', err);
+        }
+    })();
+    </script>
+</body>
+</html>
