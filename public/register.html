@@ -1,50 +1,124 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S'inscrire - Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <h1>Créer un compte</h1>
-  <form id="registerForm">
-    <label>Nom: <input type="text" name="name" required></label><br><br>
-    <label>Email: <input type="email" name="email" required></label><br><br>
-    <label>Password: <input type="password" name="password" required minlength="6"></label><br><br>
-    <button type="submit">Créer</button>
-  </form>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
+        <!-- Logo et titre -->
+        <div class="text-center">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="mx-auto h-12 w-12 mb-4">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">Prospection IA</h1>
+            <h2 class="text-xl font-medium text-gray-900 mb-2">Créer un compte</h2>
+            <p class="text-sm text-gray-600 mb-6">Commencez à utiliser Prospection IA gratuitement</p>
+        </div>
 
-  <div id="out"></div>
+        <form id="registerForm" class="space-y-4">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nom complet</label>
+                <input type="text" id="name" name="name" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="John Doe">
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="votre@email.com">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input type="password" id="password" name="password" required minlength="6"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <button type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                    Créer mon compte
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                Déjà un compte ? <a href="/login.html" class="text-blue-600 hover:text-blue-700">se connecter</a>
+            </p>
+        </div>
+
+        <div class="mt-6 text-center text-xs text-gray-500">
+            En vous inscrivant, vous acceptez nos <a href="#" class="text-blue-600">conditions d'utilisation</a>
+        </div>
+
+        <div id="out" class="mt-4 text-center text-sm hidden"></div>
+    </div>
 
   <script>
-    const form = document.getElementById('registerForm');
-    const out = document.getElementById('out');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      out.textContent = 'Envoi...';
-      const fd = new FormData(form);
-      const body = {
-        name: fd.get('name'),
-        email: fd.get('email'),
-        password: fd.get('password')
-      };
-      try {
-        const res = await fetch('/api/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          out.textContent = 'Erreur: ' + (data.error || JSON.stringify(data));
-        } else {
-          out.textContent = 'Compte créé: ' + data.user.email;
-          form.reset();
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('registerForm');
+        const out = document.getElementById('out');
+
+        if (!form) {
+            console.warn('no register form found');
+            return;
         }
-      } catch (err) {
-        out.textContent = 'Erreur réseau';
-        console.error(err);
-      }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            out.classList.remove('hidden');
+            out.textContent = 'Création du compte en cours...';
+
+            const fd = new FormData(form);
+            const body = {
+                name: (fd.get('name')||'').toString().trim(),
+                email: (fd.get('email')||'').toString().trim(),
+                password: (fd.get('password')||'').toString()
+            };
+
+            if (!body.name || !body.email || !body.password) {
+                out.classList.add('text-red-600');
+                out.textContent = 'Merci de remplir tous les champs.';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                const text = await res.text();
+                let data = null;
+                try { data = JSON.parse(text); } catch(e){}
+
+                if (!res.ok) {
+                    out.classList.add('text-red-600');
+                    out.textContent = (data && data.error) ? data.error : ('Erreur ' + res.status);
+                    console.warn('register failed', res.status, text);
+                    return;
+                }
+
+                out.classList.add('text-green-600');
+                out.textContent = 'Compte créé avec succès ! Redirection...';
+                form.reset();
+
+                // Redirection vers la page de connexion
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 1500);
+            } catch (err) {
+                console.error('fetch /api/register error', err);
+                out.classList.add('text-red-600');
+                out.textContent = 'Erreur réseau, veuillez réessayer.';
+            }
+        });
     });
-  </script>
+    </script>
 </body>
 </html>

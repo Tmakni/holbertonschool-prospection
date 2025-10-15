@@ -1,4 +1,7 @@
 // Stockage temporaire en mémoire pour le développement
+import fs from 'fs';
+import path from 'path';
+
 const db = {
     users: new Map(),
     contacts: new Map(),
@@ -10,6 +13,37 @@ let isConnected = false;
 export async function connectDB() {
     try {
         console.log('Utilisation du stockage en mémoire temporaire');
+        // essayer de charger des utilisateurs existants depuis data/users.json (dev)
+        try {
+            const dataPath = path.join(process.cwd(), 'data', 'users.json');
+            if (fs.existsSync(dataPath)) {
+                const raw = fs.readFileSync(dataPath, 'utf8');
+                const arr = JSON.parse(raw);
+                if (Array.isArray(arr)) {
+                    arr.forEach(u => {
+                        // Normaliser la forme attendue par le reste de l'app
+                        const id = u.id || u._id || (Date.now().toString(36) + Math.random().toString(36).substring(2));
+                        const email = (u.email || '').toLowerCase();
+                        // Si le fichier contient 'passwordHash' (hash bcrypt), on le conserve sous la clé 'password'
+                        // car le code attend user.password (comparaison bcrypt.compare(password, user.password)).
+                        const password = u.password || u.passwordHash || null;
+                        const user = {
+                            _id: id,
+                            id,
+                            email,
+                            password,
+                            name: u.name || u.email || 'utilisateur',
+                            createdAt: u.createdAt ? new Date(u.createdAt) : new Date()
+                        };
+                        db.users.set(id, user);
+                    });
+                    console.log(`Seed: chargé ${arr.length} utilisateurs depuis ${dataPath}`);
+                }
+            }
+        } catch (e) {
+            console.warn('Seed users failed', e && e.message);
+        }
+
         isConnected = true;
         return true;
     } catch (error) {

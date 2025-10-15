@@ -1,72 +1,20 @@
-<!doctype html>
-<html lang="fr" dir="ltr">
-  <head>
-    <!-- Charset & Viewport -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Primary Meta Tags -->
-    <title>Prospection IA — Générateur de messages B2B personnalisés</title>
-    <meta name="description" content="Prospection IA génère des messages de prospection B2B personnalisés (email, LinkedIn) à partir de vos listes de contacts. Import CSV, modèles dynamiques, et IA pour booster vos réponses." />
-    <meta name="theme-color" content="#0ea5e9" />
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://prospection-ia.example.com/" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://prospection-ia.example.com/" />
-    <meta property="og:title" content="Prospection IA — Générateur de messages B2B" />
-    <meta property="og:description" content="Importez vos contacts, choisissez un modèle, générez des messages personnalisés avec l'IA." />
-    <meta property="og:image" content="/assets/og-cover.jpg?v=1732636800" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Prospection IA — Générateur de messages B2B" />
-    <meta name="twitter:description" content="Importez vos contacts, choisissez un modèle, générez des messages personnalisés avec l'IA." />
-    <meta name="twitter:image" content="/assets/og-cover.jpg?v=1732636800" />
-
-    <!-- Icons -->
-    <link rel="icon" href="/favicon.ico?v=1" sizes="any" />
-    <link rel="icon" href="/icon.svg?v=1" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1" />
-    <link rel="manifest" href="/site.webmanifest" />
-
-    <!-- Preconnect (API, CDN, Fonts) -->
-    <link rel="preconnect" href="https://api.prospection-ia.example.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Preload critical resources -->
-    <link rel="preload" as="style" href="/assets/app.min.css?v=1732636800" />
-    <link rel="preload" as="font" href="/assets/inter-var.woff2" type="font/woff2" crossorigin />
-
-    <!-- CSS (minifié + hash) -->
-    <link rel="stylesheet" href="/assets/app.min.css?v=1732636800" />
-
-    <!-- Security (header CSP recommended; meta as fallback) -->
-    <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https://api.prospection-ia.example.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; frame-ancestors 'none';" />
-
-  </head>
-
-  <body class="min-h-screen bg-white text-slate-900">
-    <header role="banner" class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
-      <div class="container" style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:16px;height:64px;">
-        <a href="#main" class="skip-link" style="position:absolute;left:-9999px;">Aller au contenu</a>
-        <a href="/" aria-label="Accueil Prospection IA" style="display:flex;align-items:center;gap:8px;font-weight:700;">
-          <img src="/icon.svg" alt="Logo Prospection IA" width="28" height="28" />
-          <span>Prospection IA</span>
-        </a>
-        <nav aria-label="Navigation principale" style="margin-left:auto;display:flex;gap:16px;">
-          <a href="#features">Fonctionnalités</a>
-          <a href="#demo">Démo</a>
-          <a href="#pricing">Tarifs</a>
-          <a href="#contact">Contact</a>
-          <!-- CTA : redirige vers la page de connexion plutôt que vers /app -->
-          <a href="/login.html" class="btn" style="padding:8px 14px;border-radius:9999px;border:1px solid #e5e7eb;">Se connecter</a>
-        </nav>
-      </div>
-    </header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div id="redirect-message" class="min-h-screen flex items-center justify-center">
+        <p class="text-gray-600">Redirection vers la page de connexion...</p>
+    </div>
+    <script>
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 100);
+    </script>
 
     <main id="main" tabindex="-1">
       <!-- Hero -->

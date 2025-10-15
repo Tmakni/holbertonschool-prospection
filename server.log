@@ -1,0 +1,53 @@
+
+> prospection-ia@0.1.0 dev
+> nodemon --watch src --ext js --exec node src/server.js
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): src/**/*[39m
+[33m[nodemon] watching extensions: js[39m
+[32m[nodemon] starting `node src/server.js`[39m
+=== DIAGNOSTIC DÉMARRAGE ===
+Dossier actuel: /home/tom/holbertonschool-prospection
+Dossier public: /home/tom/holbertonschool-prospection/public
+Vérifification index.html: OK
+Vérifification login.html: OK
+Vérifification register.html: OK
+Vérifification app/dashboard.html: OK
+Utilisation du stockage en mémoire temporaire
+Seed: chargé 1 utilisateurs depuis /home/tom/holbertonschool-prospection/data/users.json
+Serveur démarré sur http://localhost:3000
+Vous pouvez aussi essayer : http://127.0.0.1:3000
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] starting `node src/server.js`[39m
+=== DIAGNOSTIC DÉMARRAGE ===
+Dossier actuel: /home/tom/holbertonschool-prospection
+Dossier public: /home/tom/holbertonschool-prospection/public
+Vérifification index.html: OK
+Vérifification login.html: OK
+Vérifification register.html: OK
+Vérifification app/dashboard.html: OK
+Utilisation du stockage en mémoire temporaire
+Seed: chargé 1 utilisateurs depuis /home/tom/holbertonschool-prospection/data/users.json
+Serveur démarré sur http://localhost:3000
+Vous pouvez aussi essayer : http://127.0.0.1:3000
+[2025-10-08T13:46:28.720Z] POST /api/register
+Headers: { host: 'localhost:3000', 'user-agent': 'curl/8.5.0', accept: '*/*' }
+[2025-10-08T13:46:54.293Z] POST /api/test
+Headers: { host: 'localhost:3000', 'user-agent': 'curl/8.5.0', accept: '*/*' }
+Test API appelé
+[2025-10-08T13:47:10.231Z] POST /api/register
+Headers: { host: 'localhost:3000', 'user-agent': 'curl/8.5.0', accept: '*/*' }
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+=== DIAGNOSTIC DÉMARRAGE ===
+Dossier actuel: /home/tom/holbertonschool-prospection
+Dossier public: /home/tom/holbertonschool-prospection/public
+Vérifification index.html: OK
+Vérifification login.html: OK
+Vérifification register.html: OK
+Vérifification app/dashboard.html: OK
+Utilisation du stockage en mémoire temporaire
+Seed: chargé 1 utilisateurs depuis /home/tom/holbertonschool-prospection/data/users.json
+Serveur démarré sur http://localhost:3000
+Vous pouvez aussi essayer : http://127.0.0.1:3000

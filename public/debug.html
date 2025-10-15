@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Test</title>
+</head>
+<body>
+    <h1>Test de connexion</h1>
+    <div id="status">Chargement...</div>
+
+    <script>
+        // Test simple de l'API
+        fetch('/api/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('status').textContent = 'API accessible : ' + JSON.stringify(data);
+        })
+        .catch(error => {
+            document.getElementById('status').textContent = 'Erreur : ' + error.message;
+        });
+    </script>
+</body>
+</html>

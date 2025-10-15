@@ -1,92 +1,126 @@
 import express from 'express';
-import cors from 'cors';
 import path from 'path';
-import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-import { connectDB } from './config/memoryDb.js';
-import authRouter from './routes/auth.js';
-import { messageRouter } from './routes/messages.js';
+import fs from 'fs';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import jwt from 'jsonwebtoken';
-import { generateMessage } from './utils/generateMessage.js';
+import authRouter from './routes/auth.js';
+import { connectDB } from './config/memoryDb.js';
 
-// Charger les variables d'environnement
-dotenv.config();
-
+// Configuration de base
 const app = express();
-
-// Connexion à la base de données
-connectDB().catch(console.error);
-
-// CORS et middleware
-app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-app.use(cookieParser());
 
-// paths ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const publicPath = path.join(__dirname, '..', 'public');
 
-// statics
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// Vérification des fichiers critiques
+console.log('=== DIAGNOSTIC DÉMARRAGE ===');
+console.log('Dossier actuel:', process.cwd());
+console.log('Dossier public:', publicPath);
 
-// auth routes
-app.use('/api', authRouter);
+const filesToCheck = [
+    'index.html',
+    'login.html',
+    'register.html',
+    'app/dashboard.html'
+];
 
-// JWT secret
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme_very_secret';
+filesToCheck.forEach(file => {
+    const fullPath = path.join(publicPath, file);
+    console.log(`Vérifification ${file}:`, fs.existsSync(fullPath) ? 'OK' : 'MANQUANT');
+});
 
-// middleware auth réutilisable
-export function authMiddleware(req, res, next) {
-  try {
-    const token = req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    if (!token) {
-      if (req.accepts && req.accepts('html')) return res.redirect('/login.html');
-      return res.status(401).json({ ok: false, error: 'not_authenticated' });
+// Middleware
+// express.json already applied above
+app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
+
+// Logging détaillé
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log('Headers:', req.headers);
+    if (req.body && Object.keys(req.body).length > 0) {
+        console.log('Body:', req.body);
     }
-    const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload;
-    return next();
-  } catch (err) {
-    if (req.accepts && req.accepts('html')) return res.redirect('/login.html');
-    return res.status(401).json({ ok: false, error: 'invalid_token' });
-  }
+    next();
+});
+
+// Auth middleware (vérifie le cookie JWT)
+export function authMiddleware(req, res, next) {
+    try {
+        const token = req.cookies && req.cookies.token;
+        if (!token) return res.status(401).json({ ok: false, error: 'non authentifié' });
+        const payload = jwt.verify(token, process.env.JWT_SECRET || 'changeme_very_secret');
+        req.user = payload;
+        next();
+    } catch (err) {
+        console.warn('authMiddleware error', err && err.message);
+        return res.status(401).json({ ok: false, error: 'token invalide' });
+    }
 }
 
-// protected example
-app.post('/api/generate', authMiddleware, (req, res) => {
-  try {
-    const { name, company, template } = req.body || {};
-    const message = generateMessage({ name, company, template });
-    res.json({ ok: true, message });
-  } catch (e) {
-    res.status(400).json({ ok: false, error: e.message });
-  }
+// Route de test simple pour l'API
+app.post('/api/test', (req, res) => {
+    console.log('Test API appelé');
+    res.json({ message: 'API fonctionne' });
 });
 
-app.get('/api/me', authMiddleware, (req, res) => res.json({ ok: true, user: req.user }));
+if (!fs.existsSync(publicPath)) {
+    console.error('ERREUR: Le dossier public n\'existe pas:', publicPath);
+    process.exit(1);
+}
 
-// Protection de toutes les routes /app/* 
-app.use('/app', authMiddleware);
-
-// Routes principales
-app.get('/', async (req, res) => {
-    const token = req.cookies?.token;
-    if (token) {
-        try {
-            jwt.verify(token, JWT_SECRET);
-            return res.redirect('/app');
-        } catch (err) {
-            // Token invalide, supprimer le cookie
-            res.clearCookie('token');
-        }
-    }
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+// Route de test basique
+app.get('/test', (req, res) => {
+    res.send('Le serveur fonctionne !');
 });
 
-app.get('/app', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
-});
+// Servir les fichiers statiques
+app.use(express.static(publicPath));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Prospection IA -> http://localhost:${PORT}`));
+// Avant de monter les routes API et démarrer le serveur, s'assurer que la DB (mémoire) est prête
+connectDB().then(() => {
+    // Monter les routes API
+    app.use('/api', authRouter);
+
+    // Routes principales
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(publicPath, 'index.html'));
+    });
+
+    // Raccourcis pour les URLs sans extension utilisées par le front
+    app.get('/login', (req, res) => {
+        res.sendFile(path.join(publicPath, 'login.html'));
+    });
+
+    app.get('/register', (req, res) => {
+        res.sendFile(path.join(publicPath, 'register.html'));
+    });
+
+    // Landing de l'app (tableau de bord statique pour dev)
+    app.get('/app', (req, res) => {
+        res.sendFile(path.join(publicPath, 'app', 'dashboard.html'));
+    });
+
+    // Gestion des 404 (doit être la dernière route)
+    app.use((req, res) => {
+        res.status(404).send('Page non trouvée');
+    });
+
+    // Démarrage du serveur
+    const port = 3000;
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`Serveur démarré sur http://localhost:${port}`);
+        console.log(`Vous pouvez aussi essayer : http://127.0.0.1:${port}`);
+    });
+
+}).catch(err => {
+    console.error('Impossible d\'initialiser la base:', err);
+    process.exit(1);
+});
