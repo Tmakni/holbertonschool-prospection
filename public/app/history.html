@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Messages - Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full">
+            <div class="flex items-center p-4">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="h-8 w-8">
+                <span class="ml-3 text-lg font-semibold text-gray-900">Prospection IA</span>
+            </div>
+            
+            <nav class="mt-6 px-4 space-y-1">
+                <a href="/app/dashboard" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="/app/import" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Import Contacts
+                </a>
+                <a href="/app/generate" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    Generate Messages
+                </a>
+                <a href="/app/history" class="flex items-center px-4 py-2 text-blue-600 bg-blue-50 rounded-md group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    History
+                </a>
+                <a href="/app/settings" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="ml-64 flex-1 p-8">
+            <div class="max-w-6xl mx-auto space-y-8">
+                <header class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Historique des interactions</h1>
+                        <p class="text-sm text-gray-600">Consultez les messages envoyés, leurs réponses et la performance de vos campagnes.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <select class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option>Campagne : Toutes</option>
+                            <option>Découverte Q4</option>
+                            <option>Relance clients actifs</option>
+                            <option>Prospection SaaS</option>
+                        </select>
+                        <select class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option>Période : 30 derniers jours</option>
+                            <option>7 derniers jours</option>
+                            <option>90 derniers jours</option>
+                            <option>Année en cours</option>
+                        </select>
+                        <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm bg-white hover:bg-gray-50">
+                            Exporter CSV
+                        </button>
+                    </div>
+                </header>
+
+                <section class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <p class="text-xs font-medium uppercase text-gray-500">Messages envoyés</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p class="text-3xl font-semibold text-gray-900">312</p>
+                            <span class="ml-2 text-sm text-green-600">+18%</span>
+                        </div>
+                        <p class="mt-3 text-xs text-gray-500">vs. période précédente</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <p class="text-xs font-medium uppercase text-gray-500">Taux de réponse</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p class="text-3xl font-semibold text-gray-900">31%</p>
+                            <span class="ml-2 text-sm text-green-600">+6%</span>
+                        </div>
+                        <p class="mt-3 text-xs text-gray-500">Réponses positives uniquement</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <p class="text-xs font-medium uppercase text-gray-500">Temps moyen de réponse</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p class="text-3xl font-semibold text-gray-900">4h</p>
+                            <span class="ml-2 text-sm text-red-500">-35min</span>
+                        </div>
+                        <p class="mt-3 text-xs text-gray-500">Depuis l'envoi initial</p>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900">Timeline des échanges</h2>
+                            <p class="text-xs text-gray-500">Filtrez par campagne, statut ou réponse.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <button class="px-3 py-1 rounded-full border border-indigo-500 text-indigo-600 bg-indigo-50">Toutes</button>
+                            <button class="px-3 py-1 rounded-full border border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-600">En attente</button>
+                            <button class="px-3 py-1 rounded-full border border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-600">Répondu</button>
+                            <button class="px-3 py-1 rounded-full border border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-600">À relancer</button>
+                        </div>
+                    </div>
+
+                    <ul class="divide-y divide-gray-100">
+                        <li class="px-6 py-4 flex flex-col gap-2 md:flex-row md:justify-between md:items-start">
+                            <div class="flex items-start gap-4">
+                                <span class="mt-1 h-10 w-10 flex items-center justify-center rounded-full bg-indigo-50 text-indigo-600 font-semibold">MB</span>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Message envoyé à Marie Dubois</p>
+                                    <p class="text-xs text-gray-500">Campagne Découverte Q4 · Objectif : rendez-vous</p>
+                                    <p class="mt-1 text-sm text-gray-600 line-clamp-2">"Bonjour Marie, merci pour votre keynote au SaaS Summit. Nous aidons des scale-ups comme TechLabs à automatiser..."</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-end gap-2">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Répondu</span>
+                                <p class="text-xs text-gray-500">Réponse reçue il y a 3h</p>
+                            </div>
+                        </li>
+                        <li class="px-6 py-4 flex flex-col gap-2 md:flex-row md:justify-between md:items-start">
+                            <div class="flex items-start gap-4">
+                                <span class="mt-1 h-10 w-10 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 font-semibold">JM</span>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Relance programmée — Jean Martin</p>
+                                    <p class="text-xs text-gray-500">Prospection SaaS · Scénario : relance + invitation démo</p>
+                                    <p class="mt-1 text-sm text-gray-600">Dernier message envoyé il y a 2 jours. Relance automatique prévue demain 09:00.</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-end gap-2">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">En attente</span>
+                                <button class="text-xs text-indigo-600 hover:text-indigo-500">Relancer maintenant</button>
+                            </div>
+                        </li>
+                        <li class="px-6 py-4 flex flex-col gap-2 md:flex-row md:justify-between md:items-start">
+                            <div class="flex items-start gap-4">
+                                <span class="mt-1 h-10 w-10 flex items-center justify-center rounded-full bg-purple-50 text-purple-600 font-semibold">SB</span>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Réponse négative — Sophie Bernard</p>
+                                    <p class="text-xs text-gray-500">Relance clients actifs · Segment RH</p>
+                                    <p class="mt-1 text-sm text-gray-600">"Bonjour, nous avons déjà un partenaire pour ce sujet. Recontactez-nous au S2."</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-end gap-2">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">Clôturé</span>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Archiver</button>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -104,9 +104,19 @@ connectDB().then(() => {
     });
 
     // Landing de l'app (tableau de bord statique pour dev)
-    app.get('/app', (req, res) => {
-        res.sendFile(path.join(publicPath, 'app', 'dashboard.html'));
+    app.get('/app', authMiddleware, (req, res) => {
+        res.redirect('/app/dashboard');
     });
+
+    const sendAppPage = (file) => [authMiddleware, (req, res) => res.sendFile(path.join(publicPath, 'app', file))];
+
+    // Routes protégées de l'application
+    app.get('/app/dashboard', ...sendAppPage('dashboard.html'));
+    app.get('/app/import', ...sendAppPage('import.html'));
+    app.get('/app/generate', ...sendAppPage('generate.html'));
+    app.get('/app/send', ...sendAppPage('send.html'));
+    app.get('/app/history', ...sendAppPage('history.html'));
+    app.get('/app/settings', ...sendAppPage('settings.html'));
 
     // Gestion des 404 (doit être la dernière route)
     app.use((req, res) => {

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - Prospection IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full">
+            <div class="flex items-center p-4">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="h-8 w-8">
+                <span class="ml-3 text-lg font-semibold text-gray-900">Prospection IA</span>
+            </div>
+            
+            <nav class="mt-6 px-4 space-y-1">
+                <a href="/app/dashboard" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="/app/import" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Import Contacts
+                </a>
+                <a href="/app/generate" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    Generate Messages
+                </a>
+                <a href="/app/history" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50 group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    History
+                </a>
+                <a href="/app/settings" class="flex items-center px-4 py-2 text-blue-600 bg-blue-50 rounded-md group">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="ml-64 flex-1 p-8">
+            <div class="max-w-5xl mx-auto space-y-8">
+                <header>
+                    <h1 class="text-2xl font-bold text-gray-900">Paramètres du compte</h1>
+                    <p class="mt-2 text-sm text-gray-600">Mettez à jour vos informations personnelles, gérez vos clés API et configurez la sécurité.</p>
+                </header>
+
+                <section class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+                    <div class="lg:col-span-3 space-y-6">
+                        <form class="bg-white rounded-lg shadow p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-lg font-semibold text-gray-900">Profil</h2>
+                                    <p class="text-xs text-gray-500">Ces informations sont visibles par votre équipe.</p>
+                                </div>
+                                <button type="button" class="text-sm text-indigo-600 hover:text-indigo-500">Changer l'avatar</button>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Prénom</label>
+                                    <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" value="Tom">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nom</label>
+                                    <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" value="Makni">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" value="tom.makni@gmail.com">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Rôle</label>
+                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option>Administrateur</option>
+                                        <option>Manager</option>
+                                        <option>Contributeur</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Fuseau horaire</label>
+                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option>Europe/Paris (UTC+1)</option>
+                                        <option>Europe/London (UTC+0)</option>
+                                        <option>America/New_York (UTC-5)</option>
+                                        <option>Asia/Singapore (UTC+8)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    Enregistrer les modifications
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="bg-white rounded-lg shadow p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-lg font-semibold text-gray-900">Sécurité &amp; connexion</h2>
+                                    <p class="text-xs text-gray-500">Protégez votre compte en activant des facteurs supplémentaires.</p>
+                                </div>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Sécurité forte</span>
+                            </div>
+
+                            <div class="border rounded-lg p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Authentification à deux facteurs</p>
+                                    <p class="text-xs text-gray-500">Recevez un code dans votre application d'authentification (OTP).</p>
+                                </div>
+                                <button class="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white hover:bg-gray-50">Configurer</button>
+                            </div>
+
+                            <div class="border rounded-lg p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Sessions actives</p>
+                                    <p class="text-xs text-gray-500">2 appareils connectés · Dernière connexion il y a 3 heures.</p>
+                                </div>
+                                <button class="px-4 py-2 text-sm font-medium rounded-md border border-red-200 text-red-600 hover:bg-red-50">Déconnecter tout</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="lg:col-span-2 space-y-6">
+                        <div class="bg-white rounded-lg shadow p-6 space-y-4">
+                            <h2 class="text-lg font-semibold text-gray-900">Intégrations &amp; API</h2>
+                            <div class="border border-dashed border-gray-300 rounded-lg p-4 text-center text-sm text-gray-500">
+                                <p>Ajoutez votre clé OpenAI ou HuggingFace pour générer des messages avec votre propre provider.</p>
+                                <button class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                    Ajouter une clé API
+                                </button>
+                            </div>
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <p><span class="text-gray-900 font-medium">Zapier</span> · 3 zaps actifs · Dernière sync hier</p>
+                                <p><span class="text-gray-900 font-medium">HubSpot</span> · Mode lecture seule</p>
+                                <p><span class="text-gray-900 font-medium">Slack</span> · Notifications canal #prospection</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow p-6 space-y-4">
+                            <h2 class="text-lg font-semibold text-gray-900">Préférences de notification</h2>
+                            <div class="space-y-3 text-sm text-gray-700">
+                                <label class="flex items-center justify-between">
+                                    <span>Réponse positive détectée</span>
+                                    <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
+                                </label>
+                                <label class="flex items-center justify-between">
+                                    <span>Campagne terminée</span>
+                                    <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
+                                </label>
+                                <label class="flex items-center justify-between">
+                                    <span>Limite quota atteinte</span>
+                                    <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                </label>
+                                <label class="flex items-center justify-between">
+                                    <span>Résumé hebdomadaire</span>
+                                    <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
+                                </label>
+                            </div>
+                        </div>
+                    </aside>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
