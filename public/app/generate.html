@@ -64,45 +64,38 @@
                             <h2 class="text-lg font-semibold text-gray-900">Paramètres du message</h2>
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Contact</label>
-                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                        <option>Marie Dubois — CTO, TechLabs</option>
-                                        <option>Jean Martin — CEO, Startup.io</option>
-                                        <option>Sophie Bernard — HR, PeopleFirst</option>
-                                    </select>
+                                    <label class="block text-sm font-medium text-gray-700">Nom du contact</label>
+                                    <input id="contactName" type="text" placeholder="ex: Marie Dubois" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Campagne</label>
-                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                        <option>Campagne Découverte Q4</option>
-                                        <option>Relance clients actifs</option>
-                                        <option>Prospection SaaS</option>
-                                    </select>
+                                    <label class="block text-sm font-medium text-gray-700">Entreprise</label>
+                                    <input id="company" type="text" placeholder="ex: TechLabs" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Objectif</label>
-                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                        <option>Prise de rendez-vous</option>
-                                        <option>Relance</option>
-                                        <option>Présentation produit</option>
+                                    <select id="objective" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2">
+                                        <option value="Prise de rendez-vous">Prise de rendez-vous</option>
+                                        <option value="Relance">Relance</option>
+                                        <option value="Présentation produit">Présentation produit</option>
+                                        <option value="Démo">Démo</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Ton du message</label>
-                                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                        <option>Professionnel &amp; cordial</option>
-                                        <option>Convaincant</option>
-                                        <option>Informel</option>
-                                        <option>Direct &amp; synthétique</option>
+                                    <select id="tone" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2">
+                                        <option value="Professionnel &amp; cordial">Professionnel &amp; cordial</option>
+                                        <option value="Convaincant">Convaincant</option>
+                                        <option value="Informel">Informel</option>
+                                        <option value="Direct &amp; synthétique">Direct &amp; synthétique</option>
                                     </select>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Points clés à mentionner</label>
-                                    <div class="mt-2 flex flex-wrap gap-2">
-                                        <button class="px-3 py-1 text-sm rounded-full bg-indigo-50 text-indigo-600">Succès récent du client</button>
-                                        <button class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">Cas d'usage SaaS</button>
-                                        <button class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">Invitation démo</button>
-                                        <button class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">Offre limitée</button>
+                                    <div class="mt-2 flex flex-wrap gap-2" id="highlights">
+                                        <button type="button" data-highlight="Succès récent du client" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Succès récent du client</button>
+                                        <button type="button" data-highlight="Cas d'usage SaaS" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Cas d'usage SaaS</button>
+                                        <button type="button" data-highlight="Invitation démo" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Invitation démo</button>
+                                        <button type="button" data-highlight="Offre limitée" class="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Offre limitée</button>
                                     </div>
                                 </div>
                             </div>
@@ -110,10 +103,13 @@
 
                         <div class="bg-white rounded-lg shadow p-6 space-y-4">
                             <h2 class="text-lg font-semibold text-gray-900">Instructions additionnelles</h2>
-                            <textarea rows="5" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Ajoutez un contexte spécifique, des contraintes ou des informations à inclure."></textarea>
-                            <div class="flex justify-end">
-                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                    Générer le message
+                            <textarea id="context" rows="5" class="w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" placeholder="Ajoutez un contexte spécifique, des contraintes ou des informations à inclure."></textarea>
+                            <div class="flex justify-end gap-3">
+                                <button id="toggleAI" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    <span id="aiToggleText">Utiliser IA (OpenAI)</span>
+                                </button>
+                                <button id="generateBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    <span id="generateBtnText">Générer le message</span>
                                 </button>
                             </div>
                         </div>
@@ -122,33 +118,30 @@
                     <aside class="lg:col-span-2 space-y-6">
                         <div class="bg-white rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-gray-900">Aperçu IA</h2>
-                                <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">Brouillon</span>
+                                <h2 class="text-lg font-semibold text-gray-900">Aperçu</h2>
+                                <span id="statusBadge" class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">Prêt</span>
                             </div>
-                            <div class="mt-4 space-y-4 text-sm text-gray-700 leading-6">
-                                <p>Bonjour Marie,</p>
-                                <p>J'ai suivi votre dernière levée de fonds chez TechLabs et je pense que nos solutions d'automatisation pourraient accélérer votre déploiement produit. Nous aidons déjà trois scale-ups à réduire de 40&nbsp;% le délai d'onboarding de leurs clients.</p>
-                                <p>Seriez-vous disponible pour un échange de 20 minutes cette semaine ? Je peux vous montrer un cas concret sur un projet SaaS comparable.</p>
-                                <p>Bien à vous,<br>Thomas — Prospection IA</p>
+                            <div id="preview" class="mt-4 space-y-4 text-sm text-gray-700 leading-6">
+                                <p class="text-gray-400">En attente de génération...</p>
                             </div>
                             <div class="mt-6 flex justify-between text-xs text-gray-500">
-                                <span>Version générée il y a 2 minutes</span>
-                                <button class="text-indigo-600 hover:text-indigo-500">Copier</button>
+                                <span id="timestamp">—</span>
+                                <button id="copyBtn" class="text-indigo-600 hover:text-indigo-500">Copier</button>
                             </div>
                         </div>
 
                         <div class="bg-white rounded-lg shadow p-6 space-y-4">
                             <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Templates rapides</h3>
                             <div class="space-y-3">
-                                <button class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
+                                <button class="template-btn w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
                                     <span class="block text-sm font-medium text-gray-900">Relance post-webinar</span>
                                     <span class="block text-xs text-gray-500">Recontacter les inscrits n'ayant pas réservé de démo.</span>
                                 </button>
-                                <button class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
+                                <button class="template-btn w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
                                     <span class="block text-sm font-medium text-gray-900">Cold outreach VC</span>
                                     <span class="block text-xs text-gray-500">Pitch court orienté levée de fonds.</span>
                                 </button>
-                                <button class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
+                                <button class="template-btn w-full text-left px-4 py-3 border border-gray-200 rounded-lg hover:border-indigo-400">
                                     <span class="block text-sm font-medium text-gray-900">Annonce produit</span>
                                     <span class="block text-xs text-gray-500">Mettre en avant une nouvelle fonctionnalité clé.</span>
                                 </button>
@@ -159,5 +152,127 @@
             </div>
         </main>
     </div>
+
+    <script>
+        let useAI = true;
+        let selectedHighlights = [];
+        let generatedContent = '';
+
+        // Toggle AI
+        document.getElementById('toggleAI').addEventListener('click', () => {
+            useAI = !useAI;
+            const btn = document.getElementById('toggleAI');
+            const text = document.getElementById('aiToggleText');
+            if (useAI) {
+                btn.classList.remove('bg-red-50', 'text-red-700');
+                btn.classList.add('hover:bg-gray-50');
+                text.textContent = 'Utiliser IA (OpenAI)';
+            } else {
+                btn.classList.add('bg-red-50', 'text-red-700');
+                btn.classList.remove('hover:bg-gray-50');
+                text.textContent = 'Mode template';
+            }
+        });
+
+        // Toggle highlights
+        document.querySelectorAll('#highlights button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const highlight = btn.dataset.highlight;
+                if (selectedHighlights.includes(highlight)) {
+                    selectedHighlights = selectedHighlights.filter(h => h !== highlight);
+                    btn.classList.remove('bg-indigo-50', 'text-indigo-600');
+                    btn.classList.add('bg-gray-100', 'text-gray-700');
+                } else {
+                    selectedHighlights.push(highlight);
+                    btn.classList.add('bg-indigo-50', 'text-indigo-600');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+                }
+            });
+        });
+
+        // Generate message
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const name = document.getElementById('contactName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const objective = document.getElementById('objective').value;
+            const tone = document.getElementById('tone').value;
+            const context = document.getElementById('context').value.trim();
+
+            if (!name || !company) {
+                alert('Veuillez remplir le nom du contact et l\'entreprise');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('generateBtnText');
+            const statusBadge = document.getElementById('statusBadge');
+            
+            btn.disabled = true;
+            btnText.textContent = 'Génération en cours...';
+            statusBadge.textContent = 'Génération...';
+
+            try {
+                const response = await fetch('/api/messages/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        company,
+                        tone,
+                        objective,
+                        highlights: selectedHighlights,
+                        additionalContext: context,
+                        useAI
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.ok && data.message) {
+                    generatedContent = data.message.content;
+                    const preview = document.getElementById('preview');
+                    preview.innerHTML = `<p>${generatedContent.split('\n\n').map(p => p.replace(/\n/g, '<br>')).join('</p><p>')}</p>`;
+                    
+                    const timestamp = document.getElementById('timestamp');
+                    const now = new Date();
+                    timestamp.textContent = `Généré à ${now.toLocaleTimeString('fr-FR')}`;
+                    
+                    statusBadge.textContent = 'Généré';
+                    statusBadge.classList.remove('text-gray-600', 'bg-gray-100');
+                    statusBadge.classList.add('text-green-600', 'bg-green-100');
+                } else {
+                    alert(`Erreur: ${data.error || 'Impossible de générer le message'}`);
+                    statusBadge.textContent = 'Erreur';
+                    statusBadge.classList.remove('text-gray-600', 'bg-gray-100');
+                    statusBadge.classList.add('text-red-600', 'bg-red-100');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Erreur serveur: ' + error.message);
+                statusBadge.textContent = 'Erreur';
+                statusBadge.classList.remove('text-gray-600', 'bg-gray-100');
+                statusBadge.classList.add('text-red-600', 'bg-red-100');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Générer le message';
+            }
+        });
+
+        // Copy message
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            if (generatedContent) {
+                navigator.clipboard.writeText(generatedContent).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copié !';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                });
+            }
+        });
+    </script>
 </body>
 </html>

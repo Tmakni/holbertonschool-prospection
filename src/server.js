@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import authRouter from './routes/auth.js';
+import { messageRouter } from './routes/messages.js';
 import { connectDB } from './config/memoryDb.js';
 
 // Configuration de base
@@ -88,6 +89,7 @@ app.use(express.static(publicPath));
 connectDB().then(() => {
     // Monter les routes API
     app.use('/api', authRouter);
+    app.use('/api/messages', messageRouter);
 
     // Routes principales
     app.get('/', (req, res) => {

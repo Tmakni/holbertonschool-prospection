@@ -1,11 +1,13 @@
 import { createMessage as dbCreateMessage, findMessagesByUser as dbFindMessagesByUser } from '../config/memoryDb.js';
 
-export async function createMessage({ userId, contactId, content, tone, length }) {
+export async function createMessage({ userId, contactId, content, tone, objective, campaign, length }) {
     const message = {
         userId,
         contactId,
         content,
         tone,
+        objective,
+        campaign,
         length
     };
     return await dbCreateMessage(message);
