@@ -103,10 +103,11 @@
 
                         <div class="bg-white rounded-lg shadow p-6 space-y-4">
                             <h2 class="text-lg font-semibold text-gray-900">Instructions additionnelles</h2>
-                            <textarea id="context" rows="5" class="w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" placeholder="Ajoutez un contexte spécifique, des contraintes ou des informations à inclure."></textarea>
+                            <p class="text-sm text-gray-600">Décrivez votre contexte spécifique. L'IA utilisera ces informations pour personnaliser le message.</p>
+                            <textarea id="context" rows="5" class="w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" placeholder="Ex: Je suis spécialisé en vidéo B2B... Je veux faire appel à leur besoin de... Le contact a récemment... Évite de mentionner..."></textarea>
                             <div class="flex justify-end gap-3">
                                 <button id="toggleAI" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                    <span id="aiToggleText">Utiliser IA (OpenAI)</span>
+                                    <span id="aiToggleText">Utiliser IA</span>
                                 </button>
                                 <button id="generateBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                     <span id="generateBtnText">Générer le message</span>
@@ -126,7 +127,11 @@
                             </div>
                             <div class="mt-6 flex justify-between text-xs text-gray-500">
                                 <span id="timestamp">—</span>
-                                <button id="copyBtn" class="text-indigo-600 hover:text-indigo-500">Copier</button>
+                                <div class="flex gap-3">
+                                    <button id="copyBtn" class="text-indigo-600 hover:text-indigo-500">Copier</button>
+                                    <button id="saveBtn" class="text-indigo-600 hover:text-indigo-500" style="display:none;">Enregistrer CSV</button>
+                                    <button id="sendEmailBtn" class="text-indigo-600 hover:text-indigo-500" style="display:none;">Envoyer par email</button>
+                                </div>
                             </div>
                         </div>
 
@@ -158,6 +163,43 @@
         let selectedHighlights = [];
         let generatedContent = '';
 
+        // Charger les paramètres depuis l'URL si présents (réutilisation depuis History)
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.has('content')) {
+                const content = params.get('content');
+                const objective = params.get('objective');
+                const tone = params.get('tone');
+                
+                // Pré-remplir le preview avec le message réutilisé
+                generatedContent = content;
+                const preview = document.getElementById('preview');
+                preview.innerHTML = `<p>${content.split('\n\n').map(p => p.replace(/\n/g, '<br>')).join('</p><p>')}</p>`;
+                
+                // Remplir les champs
+                document.getElementById('objective').value = objective || 'Prise de rendez-vous';
+                document.getElementById('tone').value = tone || 'Professionnel & cordial';
+                
+                // Montrer les boutons d'action
+                document.getElementById('saveBtn').style.display = 'inline';
+                document.getElementById('sendEmailBtn').style.display = 'inline';
+                
+                // Mettre à jour le timestamp
+                const timestamp = document.getElementById('timestamp');
+                timestamp.textContent = 'Message rechargé';
+                
+                // Mettre à jour le badge de statut
+                const statusBadge = document.getElementById('statusBadge');
+                statusBadge.textContent = 'Rechargé';
+                statusBadge.classList.remove('text-gray-600', 'bg-gray-100');
+                statusBadge.classList.add('text-blue-600', 'bg-blue-100');
+                
+                // Nettoyer l'URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
         // Toggle AI
         document.getElementById('toggleAI').addEventListener('click', () => {
             useAI = !useAI;
@@ -166,7 +208,7 @@
             if (useAI) {
                 btn.classList.remove('bg-red-50', 'text-red-700');
                 btn.classList.add('hover:bg-gray-50');
-                text.textContent = 'Utiliser IA (OpenAI)';
+                text.textContent = 'Utiliser IA';
             } else {
                 btn.classList.add('bg-red-50', 'text-red-700');
                 btn.classList.remove('hover:bg-gray-50');
@@ -190,7 +232,7 @@
             });
         });
 
-        // Generate message
+        // Generate message with FULL context
         document.getElementById('generateBtn').addEventListener('click', async () => {
             const name = document.getElementById('contactName').value.trim();
             const company = document.getElementById('company').value.trim();
@@ -223,7 +265,7 @@
                         tone,
                         objective,
                         highlights: selectedHighlights,
-                        additionalContext: context,
+                        additionalContext: context, // CLÉS: envoyer TOUS les contextes additionnels
                         useAI
                     })
                 });
@@ -239,8 +281,8 @@
                     const now = new Date();
                     timestamp.textContent = `Généré à ${now.toLocaleTimeString('fr-FR')}`;
                     
-                    statusBadge.textContent = 'Généré';
-                    statusBadge.classList.remove('text-gray-600', 'bg-gray-100');
+                    statusBadge.textContent = useAI ? 'Généré (IA)' : 'Généré (Template)';
+                    statusBadge.classList.remove('text-gray-600', 'bg-gray-100', 'text-red-600', 'bg-red-100');
                     statusBadge.classList.add('text-green-600', 'bg-green-100');
                 } else {
                     alert(`Erreur: ${data.error || 'Impossible de générer le message'}`);
@@ -272,6 +314,108 @@
                     }, 2000);
                 });
             }
+        });
+
+        // Save as CSV
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const name = document.getElementById('contactName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const objective = document.getElementById('objective').value;
+            const tone = document.getElementById('tone').value;
+            
+            if (!name || !company) {
+                alert('Veuillez remplir le nom et l\'entreprise');
+                return;
+            }
+
+            // Create CSV content
+            const timestamp = new Date().toLocaleString('fr-FR');
+            const csvContent = `"Nom","Entreprise","Objectif","Ton","Contenu","Date de création"\n"${name.replace(/"/g, '""')}","${company.replace(/"/g, '""')}","${objective}","${tone}","${generatedContent.replace(/"/g, '""')}","${timestamp}"`;
+            
+            // Create blob and download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `message_${name.replace(/\s+/g, '_')}_${Date.now()}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('Message enregistré en CSV !');
+        });
+
+        // Send via email
+        document.getElementById('sendEmailBtn').addEventListener('click', async () => {
+            const name = document.getElementById('contactName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const objective = document.getElementById('objective').value;
+            const tone = document.getElementById('tone').value;
+            
+            if (!name || !company || !generatedContent) {
+                alert('Veuillez d\'abord générer un message');
+                return;
+            }
+
+            const btn = document.getElementById('sendEmailBtn');
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.textContent = 'Envoi en cours...';
+
+            try {
+                const response = await fetch('/api/messages/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        contactName: name,
+                        company,
+                        objective,
+                        tone,
+                        content: generatedContent
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.ok) {
+                    alert('Message envoyé par email avec succès !');
+                    btn.textContent = 'Envoyé ✓';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    alert(`Erreur: ${data.error || 'Impossible d\'envoyer l\'email'}`);
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Erreur serveur: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        });
+
+        // Show action buttons when message is generated
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const sendEmailBtn = document.getElementById('sendEmailBtn');
+
+        // Override the generate handler to show buttons
+        const originalGenerateHandler = generateBtn.onclick;
+        generateBtn.addEventListener('click', () => {
+            setTimeout(() => {
+                if (document.getElementById('preview').textContent !== 'En attente de génération...') {
+                    saveBtn.style.display = 'inline';
+                    sendEmailBtn.style.display = 'inline';
+                }
+            }, 500);
         });
     </script>
 </body>

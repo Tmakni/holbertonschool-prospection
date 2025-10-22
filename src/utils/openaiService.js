@@ -22,7 +22,7 @@ function getOpenAIClient() {
  * @param {string} params.tone - Tone of message
  * @param {string} params.objective - Message objective
  * @param {string[]} params.highlights - Key points
- * @param {string} params.additionalContext - Extra context
+ * @param {string} params.additionalContext - Extra context/instructions from user
  * @returns {Promise<string>} Generated message
  */
 export async function generateMessageWithAI({
@@ -37,42 +37,51 @@ export async function generateMessageWithAI({
         throw new Error('name and company are required');
     }
 
+    const client = getOpenAIClient();
+
+    // Build highlights section
     const highlightsText = highlights.length > 0 
-        ? `Points clés : ${highlights.join(', ')}`
+        ? `Points clés à mentionner : ${highlights.join(', ')}\n`
         : '';
 
-    const prompt = `Génère un message de prospection court et percutant pour :
+    // Build context section - user instructions are CRITICAL
+    const contextSection = additionalContext 
+        ? `Instructions spécifiques de l'utilisateur : ${additionalContext}\n`
+        : '';
+
+    const prompt = `Tu es un expert en prospection B2B et copywriting. Génère un message de prospection court et percutant.
+
+INFORMATIONS DE BASE:
 - Contact : ${name}
 - Entreprise : ${company}
 - Objectif : ${objective}
-- Ton : ${tone}
-${highlightsText}
-${additionalContext ? `- Contexte : ${additionalContext}` : ''}
+- Ton souhaité : ${tone}
 
-Le message doit être :
-- Court (2-3 paragraphes max)
-- Personnel et non automatisé
-- Avec un appel à l'action clair
-- En français
+${highlightsText}${contextSection}
+INSTRUCTIONS IMPORTANTES :
+- Le message doit être personnalisé et authentique, jamais automatisé
+- Inclus un appel à l'action clair
+- Maximum 3-4 paragraphes
+- Écris en français
+${contextSection ? '- Intègre les instructions de l\'utilisateur comme priorité absolue' : ''}
 
-Génère uniquement le message, sans explications.`;
+Génère UNIQUEMENT le message, sans explications ni commentaires.`;
 
     try {
-        const client = getOpenAIClient();
         const message = await client.chat.completions.create({
             model: 'gpt-3.5-turbo',
             messages: [
                 {
                     role: 'system',
-                    content: 'Tu es expert en prospection B2B et copywriting. Génère des messages courts, percutants et personnalisés.'
+                    content: 'Tu es un expert en prospection B2B. Tes messages sont authentiques, percutants et alignés aux instructions reçues. Tu respectes STRICTEMENT les demandes spécifiques de l\'utilisateur.'
                 },
                 {
                     role: 'user',
                     content: prompt
                 }
             ],
-            temperature: 0.7,
-            max_tokens: 400,
+            temperature: 0.8, // Augmenté pour plus de créativité et respect des instructions
+            max_tokens: 500,
         });
 
         const content = message.choices[0]?.message?.content;

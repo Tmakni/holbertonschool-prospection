@@ -101,4 +101,17 @@ router.post('/logout', (req, res) => {
   return res.json({ ok: true });
 });
 
+// Get current user
+router.get('/user', (req, res) => {
+  try {
+    const token = req.cookies && req.cookies.token;
+    if (!token) return res.status(401).json({ ok: false, error: 'non authentifié' });
+    
+    const payload = jwt.verify(token, JWT_SECRET);
+    return res.json({ ok: true, user: payload });
+  } catch (err) {
+    return res.status(401).json({ ok: false, error: 'token invalide' });
+  }
+});
+
 export default router;

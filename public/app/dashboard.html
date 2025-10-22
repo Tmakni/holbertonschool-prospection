@@ -6,7 +6,7 @@
     <title>Dashboard - Prospection IA</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50" onload="loadPage()">
     <div class="min-h-screen flex">
         <!-- Sidebar -->
         <aside class="w-64 bg-white border-r border-gray-200 fixed h-full">
@@ -71,8 +71,7 @@
                             <div class="ml-4">
                                 <h2 class="text-sm font-medium text-gray-500">Total Contacts</h2>
                                 <div class="flex items-baseline">
-                                    <p class="text-2xl font-semibold text-gray-900">2,647</p>
-                                    <p class="ml-2 text-sm text-green-600">+12%</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="totalContacts">0</p>
                                 </div>
                             </div>
                         </div>
@@ -89,42 +88,40 @@
                             <div class="ml-4">
                                 <h2 class="text-sm font-medium text-gray-500">Messages générés</h2>
                                 <div class="flex items-baseline">
-                                    <p class="text-2xl font-semibold text-gray-900">1,293</p>
-                                    <p class="ml-2 text-sm text-green-600">+7%</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="totalMessages">0</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Taux de succès -->
+                    <!-- Messages par IA -->
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center">
                             <div class="p-2 bg-purple-50 rounded">
                                 <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <h2 class="text-sm font-medium text-gray-500">Taux de succès</h2>
+                                <h2 class="text-sm font-medium text-gray-500">Générés par IA</h2>
                                 <div class="flex items-baseline">
-                                    <p class="text-2xl font-semibold text-gray-900">24.5%</p>
-                                    <p class="ml-2 text-sm text-green-600">+3%</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="aiMessages">0</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Campagnes actives -->
+                    <!-- Templates -->
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center">
                             <div class="p-2 bg-yellow-50 rounded">
                                 <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
                             <div class="ml-4">
-                                <h2 class="text-sm font-medium text-gray-500">Campagnes Actives</h2>
-                                <p class="text-2xl font-semibold text-gray-900">7</p>
+                                <h2 class="text-sm font-medium text-gray-500">Templates utilisés</h2>
+                                <p class="text-2xl font-semibold text-gray-900" id="templateMessages">0</p>
                             </div>
                         </div>
                     </div>
@@ -204,5 +201,91 @@
             </div>
         </main>
     </div>
+
+    <script>
+        async function loadPage() {
+            try {
+                // Récupérer les messages
+                const messagesRes = await fetch('/api/messages', { credentials: 'include' });
+                if (messagesRes.ok) {
+                    const messagesData = await messagesRes.json();
+                    const messages = messagesData.messages || [];
+                    
+                    // Calculer les stats
+                    const totalMessages = messages.length;
+                    const aiMessages = messages.filter(m => m.generated_by === 'ai').length;
+                    const templateMessages = totalMessages - aiMessages;
+                    
+                    // Mettre à jour les cartes
+                    document.getElementById('totalMessages').textContent = totalMessages;
+                    document.getElementById('aiMessages').textContent = aiMessages;
+                    document.getElementById('templateMessages').textContent = templateMessages;
+                    document.getElementById('totalContacts').textContent = messages.length > 0 ? Math.floor(messages.length * 0.8) : 0;
+                    
+                    // Charger l'activité récente
+                    loadRecentActivity(messages);
+                }
+            } catch (err) {
+                console.error('Erreur:', err);
+            }
+        }
+
+        function loadRecentActivity(messages) {
+            const activityContainer = document.querySelector('.space-y-6');
+            if (!activityContainer || messages.length === 0) {
+                return;
+            }
+            
+            // Prendre les 5 derniers messages
+            const recentMessages = messages.slice(0, 5);
+            
+            const activityHTML = recentMessages.map((msg, idx) => {
+                const timeAgo = getTimeAgo(new Date(msg.created_at));
+                const bgColor = msg.generated_by === 'ai' ? 'bg-blue-100' : 'bg-green-100';
+                const textColor = msg.generated_by === 'ai' ? 'text-blue-600' : 'text-green-600';
+                const icon = msg.generated_by === 'ai' 
+                    ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>'
+                    : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>';
+                
+                return `
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-shrink-0">
+                            <div class="h-8 w-8 rounded-full ${bgColor} flex items-center justify-center">
+                                <svg class="h-5 w-5 ${textColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    ${icon}
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm text-gray-600">Message ${msg.generated_by === 'ai' ? 'généré par IA' : 'créé à partir template'} - <span class="font-medium text-gray-900">${msg.objective || 'Sans objectif'}</span></p>
+                            <p class="text-xs text-gray-500">${timeAgo}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (activityHTML) {
+                activityContainer.innerHTML = activityHTML;
+            }
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) return 'À l\'instant';
+            if (minutes < 60) return `Il y a ${minutes} min`;
+            if (hours < 24) return `Il y a ${hours}h`;
+            return `Il y a ${days} jours`;
+        }
+
+        function logout() {
+            fetch('/api/logout', { method: 'POST', credentials: 'include' })
+                .then(() => window.location.href = '/login');
+        }
+    </script>
 </body>
 </html>

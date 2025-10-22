@@ -1,6 +1,12 @@
-import { createMessage as dbCreateMessage, findMessagesByUser as dbFindMessagesByUser } from '../config/memoryDb.js';
+import { createMessage as dbCreateMessage, findMessagesByUser as dbFindMessagesByUser } from '../config/mysqlProcedures.js';
+import { isMysqlAvailable } from '../config/mysqlProcedures.js';
+import * as memoryDb from '../config/memoryDb.js';
 
-export async function createMessage({ userId, contactId, content, tone, objective, campaign, length }) {
+// Utiliser MySQL si disponible, sinon memoryDb
+const getCreateMessage = () => isMysqlAvailable() ? dbCreateMessage : memoryDb.createMessage;
+const getFindMessagesByUser = () => isMysqlAvailable() ? dbFindMessagesByUser : memoryDb.findMessagesByUser;
+
+export async function createMessage({ userId, contactId, content, tone, objective, campaign, length, generatedBy, generated_by }) {
     const message = {
         userId,
         contactId,
@@ -8,11 +14,12 @@ export async function createMessage({ userId, contactId, content, tone, objectiv
         tone,
         objective,
         campaign,
-        length
+        length,
+        generatedBy: generatedBy || generated_by || 'template'
     };
-    return await dbCreateMessage(message);
+    return await getCreateMessage()(message);
 }
 
 export async function findMessagesByUser(userId) {
-    return await dbFindMessagesByUser(userId);
+    return await getFindMessagesByUser()(userId);
 }

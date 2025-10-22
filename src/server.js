@@ -1,3 +1,4 @@
+import 'dotenv/config.js';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -7,6 +8,8 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import authRouter from './routes/auth.js';
 import { messageRouter } from './routes/messages.js';
+import { emailRouter } from './routes/emails.js';
+import { initializePool, testConnection } from './config/mysqlProcedures.js';
 import { connectDB } from './config/memoryDb.js';
 
 // Configuration de base
@@ -85,11 +88,37 @@ app.get('/test', (req, res) => {
 // Servir les fichiers statiques
 app.use(express.static(publicPath));
 
-// Avant de monter les routes API et démarrer le serveur, s'assurer que la DB (mémoire) est prête
-connectDB().then(() => {
+// Initialiser MySQL (optionnel - fonctionne sans si MySQL n'est pas disponible)
+(async () => {
+    let mysqlConnected = false;
+    
+    // Initialiser d'abord memoryDb (toujours disponible)
+    try {
+        await connectDB();
+        console.log('✓ Stockage mémoire initialisé');
+    } catch (err) {
+        console.error('✗ Erreur init memoryDb:', err.message);
+    }
+    
+    try {
+        console.log('🔌 Tentative de connexion à MySQL...');
+        await initializePool();
+        const isConnected = await testConnection();
+        
+        if (isConnected) {
+            mysqlConnected = true;
+            console.log('✅ MySQL connecté et prêt');
+        } else {
+            console.log('⚠️  MySQL indisponible - utilisation du stockage mémoire');
+        }
+    } catch (err) {
+        console.log('⚠️  MySQL indisponible - utilisation du stockage mémoire');
+    }
+
     // Monter les routes API
     app.use('/api', authRouter);
     app.use('/api/messages', messageRouter);
+    app.use('/api/emails', emailRouter);
 
     // Routes principales
     app.get('/', (req, res) => {
@@ -128,11 +157,16 @@ connectDB().then(() => {
     // Démarrage du serveur
     const port = 3000;
     app.listen(port, '0.0.0.0', () => {
-        console.log(`Serveur démarré sur http://localhost:${port}`);
-        console.log(`Vous pouvez aussi essayer : http://127.0.0.1:${port}`);
+        console.log(`\n✅ Serveur démarré sur http://localhost:${port}`);
+        console.log(`   Vous pouvez aussi essayer : http://127.0.0.1:${port}`);
+        if (!mysqlConnected) {
+            console.log('\n⚠️  Note: MySQL n\'est pas connecté');
+            console.log('   Pour activer la persistance des données:');
+            console.log('   1. Installez MySQL');
+            console.log('   2. Exécutez: node scripts/setup.js');
+            console.log('   3. Redémarrez le serveur\n');
+        } else {
+            console.log('\n🗄️  Données persistantes avec MySQL activées\n');
+        }
     });
-
-}).catch(err => {
-    console.error('Impossible d\'initialiser la base:', err);
-    process.exit(1);
-});
+})();

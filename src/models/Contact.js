@@ -1,4 +1,10 @@
-import { createContact as dbCreateContact, findContactsByUser as dbFindContactsByUser } from '../config/memoryDb.js';
+import { createContact as dbCreateContact, findContactsByUser as dbFindContactsByUser } from '../config/mysqlProcedures.js';
+import { isMysqlAvailable } from '../config/mysqlProcedures.js';
+import * as memoryDb from '../config/memoryDb.js';
+
+// Utiliser MySQL si disponible, sinon memoryDb
+const getCreateContact = () => isMysqlAvailable() ? dbCreateContact : memoryDb.createContact;
+const getFindContactsByUser = () => isMysqlAvailable() ? dbFindContactsByUser : memoryDb.findContactsByUser;
 
 export async function createContact({ userId, name, email, linkedin }) {
     const contact = {
@@ -7,14 +13,14 @@ export async function createContact({ userId, name, email, linkedin }) {
         email: email.toLowerCase(),
         linkedin
     };
-    return await dbCreateContact(contact);
+    return await getCreateContact()(contact);
 }
 
 export async function findContactsByUser(userId) {
-    return await dbFindContactsByUser(userId);
+    return await getFindContactsByUser()(userId);
 }
 
 export async function findContactById(id) {
-    const contact = await dbFindContactsByUser(id);
+    const contact = await getFindContactsByUser()(id);
     return contact.find(c => c._id === id);
 }

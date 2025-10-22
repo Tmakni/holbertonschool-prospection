@@ -17,6 +17,8 @@
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.1.0",
+    "mysql2": "^3.15.2",
+    "nanoid": "^5.1.6",
     "node-fetch": "^2.7.0",
     "openai": "^6.6.0"
   },

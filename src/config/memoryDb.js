@@ -67,7 +67,7 @@ function generateId() {
 // User operations
 export async function createUser(userData) {
     const id = generateId();
-    const user = { _id: id, ...userData, createdAt: new Date() };
+    const user = { _id: id, id: id, ...userData, createdAt: new Date() };
     db.users.set(id, user);
     return user;
 }
@@ -99,7 +99,13 @@ export async function findContactsByUser(userId) {
 // Message operations
 export async function createMessage(messageData) {
     const id = generateId();
-    const message = { _id: id, ...messageData, createdAt: new Date() };
+    // Normaliser generatedBy -> generated_by pour l'API
+    const message = { 
+        _id: id, 
+        ...messageData, 
+        createdAt: new Date(),
+        generated_by: messageData.generatedBy || messageData.generated_by || 'template'
+    };
     db.messages.set(id, message);
     return message;
 }
