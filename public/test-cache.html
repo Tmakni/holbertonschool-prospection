@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Cache</title>
+</head>
+<body>
+    <h1>Test de mise à jour - Version 2024-11-04</h1>
+    <p>Si vous voyez ce message, le serveur envoie bien les fichiers à jour.</p>
+    <script>
+        console.log('Test cache chargé - Version', new Date().toISOString());
+        
+        // Test de l'API messages
+        fetch('/api/messages', { credentials: 'include' })
+            .then(r => r.json())
+            .then(data => {
+                console.log('Messages récupérés:', data);
+                document.body.innerHTML += `<h2>✅ API fonctionne : ${data.messages?.length || 0} messages trouvés</h2>`;
+            })
+            .catch(err => {
+                console.error('Erreur API:', err);
+                document.body.innerHTML += `<h2>❌ Erreur API : ${err.message}</h2>`;
+            });
+    </script>
+</body>
+</html>

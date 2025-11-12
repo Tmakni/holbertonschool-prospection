@@ -3,155 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import des Contacts - Prospection IA</title>
+    <title>Envoyer un Email - Prospection IA</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-gray-200">
-            <div class="h-full flex flex-col">
-                <div class="flex items-center p-4">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="h-8 w-8">
-                    <span class="ml-3 text-lg font-semibold text-gray-900">Prospection IA</span>
-                </div>
-                <nav class="flex-1 p-4 space-y-2">
-                    <a href="/app/dashboard" class="flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-100">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        Dashboard
-                    </a>
-                    <a href="/app/import" class="flex items-center px-3 py-2 text-blue-600 bg-blue-50 rounded-md">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        Import Contacts
-                    </a>
-                    <a href="/app/generate" class="flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-100">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        Generate Messages
-                    </a>
-                    <a href="/app/history" class="flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-100">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        History
-                    </a>
-                    <a href="/app/settings" class="flex items-center px-3 py-2 text-gray-600 rounded-md hover:bg-gray-100">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                        Settings
-                    </a>
-                </nav>
+        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full">
+            <div class="flex items-center p-4">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'%3E%3Cpath fill='%234F46E5' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z'/%3E%3C/svg%3E" alt="Logo" class="h-8 w-8">
+                <span class="ml-3 text-lg font-semibold text-gray-900">Prospection IA</span>
             </div>
+            <nav class="mt-6 px-4 space-y-1">
+                <a href="/app/dashboard" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="/app/import" class="flex items-center px-4 py-2 text-blue-600 bg-blue-50 rounded-md">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Envoyer Email
+                </a>
+                <a href="/app/generate" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    Generate
+                </a>
+                <a href="/app/history" class="flex items-center px-4 py-2 text-gray-600 rounded-md hover:bg-gray-50">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    History
+                </a>
+            </nav>
         </aside>
 
-        <!-- Main content -->
-        <main class="flex-1 p-8">
-            <div class="max-w-4xl mx-auto">
+        <main class="ml-64 flex-1 p-8">
+            <div class="max-w-3xl mx-auto">
                 <div class="mb-8">
-                    <h1 class="text-2xl font-bold text-gray-900">Import des Contacts</h1>
-                    <p class="mt-1 text-gray-600">Importez vos contacts depuis un fichier CSV pour commencer votre campagne de prospection.</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Envoyer un Email</h1>
+                    <p class="mt-1 text-sm text-gray-600">Envoyez vos messages personnalisés via Gmail API.</p>
                 </div>
 
-                <!-- Import section -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h3 class="text-lg font-medium mb-4">📨 Sélectionner un message généré</h3>
+                    <select id="messageSelect" class="w-full border rounded-md px-3 py-2 mb-2">
+                        <option value="">-- Charger un message --</option>
+                    </select>
+                    <p class="text-xs text-gray-500" id="messageCount">Chargement...</p>
+                    <div id="messagePreview" class="hidden bg-gray-50 border rounded-md p-4 mt-4">
+                        <div class="text-sm whitespace-pre-wrap" id="messagePreviewContent"></div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-lg shadow p-6">
-                    <div class="grid grid-cols-2 gap-8">
+                    <h3 class="text-lg font-medium mb-4">✉️ Formulaire d'envoi</h3>
+                    <div class="space-y-4">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Télécharger votre fichier CSV</h3>
-                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-blue-500 cursor-pointer">
-                                <div class="space-y-1 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4-4m4-12h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <div class="flex text-sm text-gray-600">
-                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                                            <span>Parcourir les fichiers</span>
-                                            <input id="file-upload" type="file" class="sr-only" accept=".csv">
-                                        </label>
-                                        <p class="pl-1">ou glisser-déposer</p>
-                                    </div>
-                                    <p class="text-xs text-gray-500">CSV jusqu'à 10MB</p>
-                                </div>
-                            </div>
+                            <label class="block text-sm font-medium mb-1">Message</label>
+                            <textarea id="emailMessage" rows="6" placeholder="Votre message..." class="w-full border rounded-md px-3 py-2"></textarea>
                         </div>
-
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Envoyer un message par email</h3>
-                            <form id="emailForm" class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Message à envoyer</label>
-                                    <textarea id="emailMessage" rows="4" placeholder="Écrivez le message que vous souhaitez envoyer à vos contacts..." class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2 text-sm"></textarea>
-                                    <p class="mt-1 text-xs text-gray-500">Ce message sera envoyé à tous les contacts importés</p>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Email d'expéditeur</label>
-                                    <input id="senderEmail" type="email" placeholder="ex: contact@votreentreprise.fr" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2 text-sm">
-                                    <p class="mt-1 text-xs text-gray-500">Votre email professionnel</p>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Service d'envoi</label>
-                                    <select id="emailService" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2 text-sm">
-                                        <option value="gmail">Gmail</option>
-                                        <option value="outlook">Outlook</option>
-                                        <option value="sendgrid">SendGrid</option>
-                                        <option value="mailgun">Mailgun</option>
-                                        <option value="custom">Serveur SMTP personnalisé</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Objet de l'email</label>
-                                    <input id="emailSubject" type="text" placeholder="ex: Proposition de partenariat" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2 text-sm">
-                                </div>
-
-                                <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
-                                    <p class="text-xs text-blue-800">
-                                        <strong>💡 Tip:</strong> Importez d'abord vos contacts (à gauche), puis le formulaire ci-dessous vous permettra d'envoyer ce message à tous vos contacts.
-                                    </p>
-                                </div>
-
-                                <button type="button" id="sendEmailsBtn" onclick="sendEmailsToAllContacts()" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" disabled>
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                    </svg>
-                                    Envoyer les emails
-                                </button>
-                            </form>
+                            <label class="block text-sm font-medium mb-1">Email destinataire</label>
+                            <input id="recipientEmail" type="email" placeholder="exemple@email.com" class="w-full border rounded-md px-3 py-2">
                         </div>
-                    </div>
-
-                    <!-- Format requirements -->
-                    <div class="mt-6">
-                        <h4 class="text-sm font-medium text-gray-900">Format requis :</h4>
-                        <ul class="mt-2 text-sm text-gray-600 space-y-1">
-                            <li>• Format CSV avec séparateur virgule</li>
-                            <li>• Colonnes : Name, Email, LinkedIn, Status</li>
-                            <li>• Première ligne = en-tête de colonnes</li>
-                            <li>• Taille maximale : 10 MB</li>
-                        </ul>
-                    </div>
-
-                    <!-- Upload status -->
-                    <div class="mt-6" id="uploadStatus" style="display:none;">
-                        <div class="rounded-md p-4" id="statusMessage"></div>
-                    </div>
-
-                    <!-- Imported contacts preview -->
-                    <div class="mt-8" id="importedPreview" style="display:none;">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Contacts importés</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="contactsTable">
-                                </tbody>
-                            </table>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Objet</label>
+                            <input id="emailSubject" type="text" placeholder="Objet de votre email" class="w-full border rounded-md px-3 py-2">
                         </div>
-                        <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700" onclick="generateForAllContacts()">
-                            Générer des messages pour tous
+                        <button onclick="sendEmail()" class="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                            📧 Envoyer via Gmail
                         </button>
+                    </div>
+                    <div id="uploadStatus" style="display:none" class="mt-4">
+                        <div id="statusMessage" class="rounded p-4"></div>
                     </div>
                 </div>
             </div>
@@ -159,360 +87,130 @@
     </div>
 
     <script>
-        let importedContacts = [];
-
-        const dropZone = document.querySelector('.border-dashed');
-        const fileInput = document.getElementById('file-upload');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight(e) {
-            dropZone.classList.add('border-blue-500', 'border-2');
-        }
-
-        function unhighlight(e) {
-            dropZone.classList.remove('border-blue-500', 'border-2');
-        }
-
-        dropZone.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        }
-
-        function handleFiles(files) {
-            ([...files]).forEach(uploadFile);
-        }
-
-        function uploadFile(file) {
-            if (file.size > 10 * 1024 * 1024) {
-                showStatus('error', 'Le fichier est trop volumineux. Maximum 10MB autorisé.');
-                return;
-            }
-            if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
-                showStatus('error', 'Seuls les fichiers CSV sont acceptés.');
-                return;
-            }
-            
-            // Lire le fichier CSV
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const csv = e.target.result;
-                    const lines = csv.split('\n').filter(line => line.trim() !== '');
+        let generatedMessages = [];
+        
+        async function loadGeneratedMessages() {
+            try {
+                const res = await fetch('/api/messages', { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    generatedMessages = data.messages || [];
+                    const messageSelect = document.getElementById('messageSelect');
+                    const messageCount = document.getElementById('messageCount');
                     
-                    if (lines.length < 2) {
-                        showStatus('error', 'Le fichier CSV doit contenir au moins 2 lignes (en-tête + données).');
-                        return;
-                    }
-                    
-                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-                    console.log('Headers found:', headers);
-                    
-                    // Trouver les indices des colonnes (flexible)
-                    const nameIdx = headers.findIndex(h => h.includes('name') || h === 'n');
-                    const emailIdx = headers.findIndex(h => h.includes('email') || h === 'e');
-                    const linkedinIdx = headers.findIndex(h => h.includes('linkedin') || h === 'l');
-                    
-                    console.log('Column indices - Name:', nameIdx, 'Email:', emailIdx, 'LinkedIn:', linkedinIdx);
-                    
-                    if (nameIdx === -1 || emailIdx === -1) {
-                        showStatus('error', 'Le CSV doit avoir colonnes "Name" et "Email" (ou N et E).');
-                        return;
-                    }
-                    
-                    importedContacts = [];
-                    
-                    for (let i = 1; i < lines.length; i++) {
-                        const line = lines[i].trim();
-                        if (line === '') continue;
-                        
-                        const values = line.split(',').map(v => v.trim());
-                        
-                        if (values[nameIdx] && values[emailIdx]) {
-                            importedContacts.push({
-                                name: values[nameIdx],
-                                email: values[emailIdx],
-                                linkedin: linkedinIdx !== -1 && values[linkedinIdx] ? values[linkedinIdx] : ''
-                            });
-                        }
-                    }
-                    
-                    console.log('Imported contacts:', importedContacts);
-                    
-                    if (importedContacts.length > 0) {
-                        displayImportedContacts();
-                        showStatus('success', `✅ ${importedContacts.length} contacts importés avec succès!`);
+                    if (generatedMessages.length === 0) {
+                        messageCount.textContent = 'Aucun message disponible';
+                        messageCount.classList.add('text-gray-500');
                     } else {
-                        showStatus('error', 'Aucun contact valide trouvé dans le fichier.');
+                        messageCount.textContent = generatedMessages.length + ' message(s) disponible(s)';
+                        messageCount.classList.add('text-green-600');
+                        
+                        generatedMessages.forEach((msg, idx) => {
+                            const option = document.createElement('option');
+                            option.value = idx;
+                            const preview = msg.content.substring(0, 60) + '...';
+                            option.textContent = preview;
+                            messageSelect.appendChild(option);
+                        });
                     }
-                } catch (err) {
-                    console.error('CSV parsing error:', err);
-                    showStatus('error', 'Erreur lors de la lecture du fichier: ' + err.message);
                 }
-            };
-            reader.readAsText(file);
+            } catch (err) {
+                console.error('Erreur:', err);
+                document.getElementById('messageCount').textContent = 'Erreur chargement';
+            }
         }
-
-        function displayImportedContacts() {
-            const tbody = document.getElementById('contactsTable');
-            const preview = document.getElementById('importedPreview');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGeneratedMessages();
             
-            console.log('displayImportedContacts - importedContacts:', importedContacts);
+            document.getElementById('messageSelect').addEventListener('change', (e) => {
+                const idx = e.target.value;
+                if (idx === '') {
+                    document.getElementById('messagePreview').classList.add('hidden');
+                    return;
+                }
+                
+                const msg = generatedMessages[parseInt(idx)];
+                document.getElementById('messagePreview').classList.remove('hidden');
+                document.getElementById('messagePreviewContent').textContent = msg.content;
+                document.getElementById('emailMessage').value = msg.content;
+            });
+        });
+        
+        async function sendEmail() {
+            const message = document.getElementById('emailMessage').value.trim();
+            const recipientEmail = document.getElementById('recipientEmail').value.trim();
+            const emailSubject = document.getElementById('emailSubject').value.trim();
             
-            if (importedContacts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Aucun contact importé</td></tr>';
-                preview.style.display = 'none';
-                updateEmailButtonState();
+            if (!message) {
+                showStatus('error', '❌ Veuillez entrer un message');
+                return;
+            }
+            if (!recipientEmail) {
+                showStatus('error', '❌ Veuillez entrer un email destinataire');
+                return;
+            }
+            if (!emailSubject) {
+                showStatus('error', '❌ Veuillez entrer un objet');
                 return;
             }
             
-            tbody.innerHTML = importedContacts.map((contact, idx) => `
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${contact.name || 'N/A'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${contact.email || 'N/A'}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button type="button" onclick="generateForContact(${idx})" class="text-blue-600 hover:text-blue-900">
-                            Générer un message
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+            showStatus('info', '📤 Envoi en cours...');
             
-            preview.style.display = 'block';
-            updateEmailButtonState();  // Activer le bouton d'envoi
+            try {
+                const res = await fetch('/api/emails/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ 
+                        to: recipientEmail, 
+                        subject: emailSubject, 
+                        message: message 
+                    })
+                });
+                
+                const isJson = res.headers.get('content-type')?.includes('application/json');
+                const data = isJson ? await res.json() : { ok: false, error: await res.text() };
+                
+                if (res.ok && data.ok) {
+                    showStatus('success', '✅ Email envoyé avec succès à ' + recipientEmail);
+                    document.getElementById('recipientEmail').value = '';
+                    document.getElementById('emailSubject').value = '';
+                    document.getElementById('emailMessage').value = '';
+                    document.getElementById('messageSelect').value = '';
+                    document.getElementById('messagePreview').classList.add('hidden');
+                } else {
+                    showStatus('error', '❌ Erreur: ' + (data.error || 'Échec de l\'envoi'));
+                }
+            } catch (err) {
+                console.error('Erreur:', err);
+                showStatus('error', '❌ Erreur réseau: ' + err.message);
+            }
         }
-
+        
         function showStatus(type, message) {
             const statusDiv = document.getElementById('uploadStatus');
             const statusMessage = document.getElementById('statusMessage');
             
+            let className = 'rounded p-4 ';
             if (type === 'success') {
-                statusMessage.className = 'bg-green-50 border border-green-200 text-green-800';
+                className += 'bg-green-50 border border-green-200 text-green-800';
+            } else if (type === 'info') {
+                className += 'bg-blue-50 border border-blue-200 text-blue-800';
             } else {
-                statusMessage.className = 'bg-red-50 border border-red-200 text-red-800';
+                className += 'bg-red-50 border border-red-200 text-red-800';
             }
+            
+            statusMessage.className = className;
             statusMessage.textContent = message;
             statusDiv.style.display = 'block';
-        }
-
-        async function generateForContact(idx) {
-            const contact = importedContacts[idx];
-            if (!contact) return;
             
-            try {
-                const res = await fetch('/api/messages/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        name: contact.name,
-                        company: contact.email.split('@')[1],
-                        tone: 'Professionnel & cordial',
-                        objective: 'Prise de rendez-vous',
-                        useAI: true
-                    })
-                });
-                
-                if (res.ok) {
-                    const data = await res.json();
-                    showStatus('success', `Message généré pour ${contact.name}`);
-                } else {
-                    showStatus('error', 'Erreur lors de la génération du message');
-                }
-            } catch (err) {
-                showStatus('error', 'Erreur: ' + err.message);
+            if (type !== 'info') {
+                setTimeout(() => { 
+                    statusDiv.style.display = 'none'; 
+                }, 5000);
             }
         }
-
-        async function generateForAllContacts() {
-            let successCount = 0;
-            for (let i = 0; i < importedContacts.length; i++) {
-                const contact = importedContacts[i];
-                try {
-                    const res = await fetch('/api/messages/generate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify({
-                            name: contact.name,
-                            company: contact.email.split('@')[1],
-                            tone: 'Professionnel & cordial',
-                            objective: 'Prise de rendez-vous',
-                            useAI: true
-                        })
-                    });
-                    
-                    if (res.ok) {
-                        successCount++;
-                    }
-                } catch (err) {
-                    console.error('Error generating message:', err);
-                }
-            }
-            showStatus('success', `${successCount} messages générés avec succès!`);
-        }
-
-        fileInput.addEventListener('change', function(e) {
-            handleFiles(this.files);
-        });
-
-        // Activer le bouton d'envoi d'emails quand des contacts sont importés
-        function updateEmailButtonState() {
-            const btn = document.getElementById('sendEmailsBtn');
-            if (importedContacts.length > 0) {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.classList.add('cursor-pointer');
-            } else {
-                btn.disabled = true;
-                btn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
-        }
-
-        // Envoyer les emails à tous les contacts
-        async function sendEmailsToAllContacts() {
-            console.log('=== ENVOI D\'EMAILS DÉMARRÉ ===');
-            
-            const message = document.getElementById('emailMessage').value.trim();
-            const senderEmail = document.getElementById('senderEmail').value.trim();
-            const emailService = document.getElementById('emailService').value;
-            const emailSubject = document.getElementById('emailSubject').value.trim();
-
-            console.log('Form data:', {
-                messageLength: message.length,
-                senderEmail,
-                emailService,
-                emailSubject,
-                contactsCount: importedContacts.length
-            });
-
-            if (!message) {
-                console.warn('❌ Message vide');
-                showStatus('error', 'Veuillez écrire un message');
-                return;
-            }
-            if (!senderEmail) {
-                console.warn('❌ Sender email vide');
-                showStatus('error', 'Veuillez entrer votre email d\'expéditeur');
-                return;
-            }
-            if (!emailSubject) {
-                console.warn('❌ Sujet vide');
-                showStatus('error', 'Veuillez entrer un objet pour l\'email');
-                return;
-            }
-            if (importedContacts.length === 0) {
-                console.warn('❌ Pas de contacts');
-                showStatus('error', 'Veuillez d\'abord importer des contacts');
-                return;
-            }
-
-            const btn = document.getElementById('sendEmailsBtn');
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Envoi en cours...';
-
-            let successCount = 0;
-            let errorCount = 0;
-
-            // Créer le CSV du message avec le contenu du message
-            const csvContent = createEmailCSV(message);
-            console.log('CSV créé, lignes:', csvContent.split('\n').length);
-
-            for (let i = 0; i < importedContacts.length; i++) {
-                const contact = importedContacts[i];
-                console.log(`📧 Envoi ${i+1}/${importedContacts.length} à ${contact.email}`);
-                
-                try {
-                    const payload = {
-                        recipientEmail: contact.email,
-                        recipientName: contact.name,
-                        message: message,
-                        senderEmail: senderEmail,
-                        emailService: emailService,
-                        subject: emailSubject,
-                        csvContent: csvContent
-                    };
-                    
-                    console.log('Payload:', {
-                        ...payload,
-                        message: payload.message.substring(0, 50) + '...'
-                    });
-                    
-                    const res = await fetch('/api/emails/send-bulk', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify(payload)
-                    });
-
-                    console.log(`Réponse HTTP: ${res.status} ${res.statusText}`);
-                    
-                    const data = await res.json();
-                    console.log('Données réponse:', data);
-
-                    if (res.ok && data.ok) {
-                        successCount++;
-                        console.log(`✅ Email ${i+1} réussi`);
-                    } else {
-                        errorCount++;
-                        console.error(`❌ Email ${i+1} échoué:`, data.error);
-                    }
-                } catch (err) {
-                    console.error(`❌ Erreur réseau email ${i+1}:`, err);
-                    errorCount++;
-                }
-                
-                // Petit délai pour éviter la surcharge serveur
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-
-            console.log(`\n=== RÉSUMÉ ===`);
-            console.log(`✅ Succès: ${successCount}`);
-            console.log(`❌ Erreurs: ${errorCount}`);
-
-            if (successCount > 0) {
-                showStatus('success', `${successCount} email(s) envoyé(s) avec succès! (${errorCount} erreur(s))`);
-            } else {
-                showStatus('error', `Erreur lors de l'envoi des emails (${errorCount} erreur(s))`);
-            }
-        }
-
-        // Créer un CSV contenant le message et les infos des contacts
-        function createEmailCSV(messageContent) {
-            let csv = 'Name,Email,Message\n';
-            for (let contact of importedContacts) {
-                const name = (contact.name || '').replace(/"/g, '""');
-                const email = (contact.email || '').replace(/"/g, '""');
-                const msg = (messageContent || '').replace(/"/g, '""').replace(/\n/g, ' ');
-                csv += `"${name}","${email}","${msg}"\n`;
-            }
-            return csv;
-        }
-
-        // Initialiser l'état du bouton
-        updateEmailButtonState();
     </script>
 </body>
 </html>

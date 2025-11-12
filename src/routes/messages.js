@@ -1,5 +1,5 @@
 import express from 'express';
-import { authMiddleware } from '../server.js';
+import { authMiddleware } from '../middleware/authMiddleware.js';
 import { generateMessage } from '../utils/generateMessage.js';
 import { generateMessageWithAI } from '../utils/openaiService.js';
 import messagesAPI from '../api/messagesApi.js';
@@ -26,8 +26,7 @@ router.post('/generate', async (req, res) => {
             return res.status(400).json({ ok: false, error: 'name et company requis' });
         }
 
-        let content;
-        
+        let content;        
         if (useAI && process.env.OPENAI_API_KEY) {
             try {
                 // Utiliser OpenAI

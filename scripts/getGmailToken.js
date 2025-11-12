@@ -2,11 +2,10 @@ import { google } from 'googleapis';
 import http from 'http';
 import { URL } from 'url';
 
-// Configure avec tes credentials OAuth2 de Google Cloud Console via variables d'environnement
-// Ne mets JAMAIS de secrets en dur dans le code.
-const CLIENT_ID = process.env.GMAIL_CLIENT_ID || '';
-const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET || '';
-const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI || 'http://localhost:3000/oauth2callback';
+// Configure avec tes credentials OAuth2 de Google Cloud Console
+const CLIENT_ID = 'YOUR_GMAIL_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_GMAIL_CLIENT_SECRET';
+const REDIRECT_URI = 'http://localhost:3000/oauth2callback';
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -24,10 +23,6 @@ const authUrl = oauth2Client.generateAuthUrl({
 });
 
 console.log('\n🔐 Configuration Gmail API OAuth2\n');
-if (!CLIENT_ID || !CLIENT_SECRET) {
-  console.log('❗ Variables manquantes: GMAIL_CLIENT_ID et/ou GMAIL_CLIENT_SECRET');
-  console.log("Ajoute-les dans ton .env, puis relance: node scripts/getGmailToken.js\n");
-}
 console.log('1. Un serveur local va démarrer sur http://localhost:3000');
 console.log('2. Ouvre cette URL dans ton navigateur:\n');
 console.log(authUrl + '\n');
@@ -68,8 +63,8 @@ const server = http.createServer(async (req, res) => {
       // Afficher les tokens dans le terminal
       console.log('\n✅ Tokens obtenus avec succès!\n');
       console.log('Ajoute ces valeurs dans ton fichier .env:\n');
-  console.log(`GMAIL_CLIENT_ID=${CLIENT_ID}`);
-  console.log(`GMAIL_CLIENT_SECRET=${CLIENT_SECRET}`);
+      console.log(`GMAIL_CLIENT_ID=${CLIENT_ID}`);
+      console.log(`GMAIL_CLIENT_SECRET=${CLIENT_SECRET}`);
       console.log(`GMAIL_REFRESH_TOKEN=${tokens.refresh_token}`);
       console.log(`GMAIL_USER_EMAIL=ton_email@gmail.com`);
       console.log('\n');
